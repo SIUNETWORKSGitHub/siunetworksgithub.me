@@ -1,0 +1,21 @@
+his is the file:
+
+<!DOCTYPE html>
+<html>
+<body onload="document.getElementById('saveForm').click();">
+<form method="post" enctype="multipart-form-data" name="my_form" onsubmit="clearTextBoxCounter()" action="http://xxxxx" >
+
+  <input type=hidden name=teks value=><center><b>KIRIM SMS GRATIS</b></center><br><br>
+Nomer HP:<br />
+  <input class="field text small" type="text" maxlength="20" name="Phonenumbers" value="085642383165"/>
+  <br />
+
+<br />
+Isi Pesan:<br />
+  <textarea rows="5" cols="20" onKeyPress=check_length(this.form); onKeyDown=check_length(this.form); name=Text >testing pesan 2</textarea>
+<br />
+
+<input id="saveForm" class="btTxt" type="submit" value="KIRIM" name="TOMBOL" />
+
+</body>
+</html>
