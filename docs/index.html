@@ -43,7 +43,12 @@
 <! Disabling Right Click Using HTML Body Tag >
                 
 <body oncontextmenu="return false;">
+        
+<! Prevent screenshoots >
 
+html {
+    display: none;  /* hide whole page - the only true way to prevent screenshots */
+}
         </head>
 
 
