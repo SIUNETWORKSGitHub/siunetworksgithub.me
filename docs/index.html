@@ -77,9 +77,42 @@
 
 <HR>
 
+	 <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #countdown {
+      font-size: 24px;
+    }
+
+    #home {
+      display: none;
+      text-align: center;
+      padding: 50px;
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
 
 	<header>
-			<!-- Header
+		<h1>Hello World</h1>
+    <div id="countdown">4s</div>
+  </header>
+
+  <section id="home">
+    <h2>Welcome to My Home Section!</h2>
+    <!-- Add your home content here -->
+	  <!-- Header
 	  	 	================================================== -->
 			 <header id="home">
 			
@@ -117,6 +150,34 @@
 			
 	 </header> <!-- Header End -->
 	<hr>
+  </section>
+
+  <script>
+    const countdownElement = document.getElementById('countdown');
+    const homeSection = document.getElementById('home');
+
+    let countdown = 4;
+
+    const updateCountdown = () => {
+      countdownElement.innerHTML = `${countdown}s`;
+      countdown--;
+
+      if (countdown < 0) {
+        clearInterval(countdownInterval);
+        countdownElement.style.display = 'none'; // Hide the countdown
+        homeSection.style.display = 'block'; // Show the home section
+      }
+    };
+
+    // Initial call to set the countdown
+    updateCountdown();
+
+    // Update the countdown every 1 second
+    const countdownInterval = setInterval(updateCountdown, 1000);
+  </script>
+
+		
+		
 	
 	   </div> <!-- end .main-col -->
 
