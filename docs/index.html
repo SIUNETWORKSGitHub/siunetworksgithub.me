@@ -74,31 +74,31 @@
 		
 </head>
 
-<style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      background-color: #333;
-      color: #fff;
-      text-align: center;
-      padding: 20px;
-    }
-
-    #countdown {
-      font-size: 24px;
-    }
-
-    #home {
-      display: none;
-      text-align: center;
-      padding: 50px;
-      background-color: #f0f0f0;
-    }
-  </style>
+	<style>
+	    body {
+	      font-family: Arial, sans-serif;
+	      margin: 0;
+	      padding: 0;
+	    }
+	
+	    header {
+	      background-color: #333;
+	      color: #fff;
+	      text-align: center;
+	      padding: 20px;
+	    }
+	
+	    #countdown {
+	      font-size: 24px;
+	    }
+	
+	    #home {
+	      display: none;
+	      text-align: center;
+	      padding: 50px;
+	      background-color: #f0f0f0;
+	    }
+	  </style>
 </head>
 
 	
@@ -106,18 +106,39 @@
 
 <header>
 	    <h1>Here we go, let me introduce myself!</h1>
-	    <div id="countdown">4s</div>
+	    <div id="countdown">2s</div>
 	
 	  <section id="home">
 	    <h2>Welcome to My Family album!</h2>
 	    <!-- Add your home content here -->
+
+	     <header id="home">
+	
+	      <nav id="nav-wrap">
+	
+	         <a class="mobile-btn" href="#nav-wrap" title="Show navigation">Show navigation</a>
+		      <a class="mobile-btn" href="#" title="Hide navigation">Hide navigation</a>
+	
+	         <ul id="nav" class="nav">
+			 
+	            <li class="current"><a class="smoothscroll" href="#home">Home</a></li>
+		     <li><a class="smoothscroll" href="#origen">Origen</a></li>	 
+		    
+	         </ul> <!-- end #nav -->
+	
+	      </nav> <!-- end #nav-wrap -->
+	
+	      <div class="row banner">
+	         <div class="banner-text">
+	          <h1 class="responsive-headline">Hello World, I'm Siunetworksgithub!!</h1>	
+		  
 	  </section>
 	
 	  <script>
 	    const countdownElement = document.getElementById('countdown');
 	    const homeSection = document.getElementById('home');
 	
-	    let countdown = 4;
+	    let countdown = 2;
 	
 	    const updateCountdown = () => {
 	      countdownElement.innerHTML = `${countdown}s`;
