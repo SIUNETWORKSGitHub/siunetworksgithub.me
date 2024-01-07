@@ -104,42 +104,41 @@
 	
 <body>
 
-  <header>
-    <h1>Here we go, let me introduce myself!</h1>
-    <div id="countdown">4s</div>
-  </header>
-
-  <section id="home">
-    <h2>Welcome to My Family album!</h2>
-    <!-- Add your home content here -->
-  </section>
-
-  <script>
-    const countdownElement = document.getElementById('countdown');
-    const homeSection = document.getElementById('home');
-
-    let countdown = 4;
-
-    const updateCountdown = () => {
-      countdownElement.innerHTML = `${countdown}s`;
-      countdown--;
-
-      if (countdown < 0) {
-        clearInterval(countdownInterval);
-        countdownElement.style.display = 'none'; // Hide the countdown
-        homeSection.style.display = 'block'; // Show the home section
-      }
-    };
-
-    // Initial call to set the countdown
-    updateCountdown();
-
-    // Update the countdown every 1 second
-    const countdownInterval = setInterval(updateCountdown, 1000);
-  </script>
-
+<header>
+	    <h1>Here we go, let me introduce myself!</h1>
+	    <div id="countdown">4s</div>
+	
+	  <section id="home">
+	    <h2>Welcome to My Family album!</h2>
+	    <!-- Add your home content here -->
+	  </section>
+	
+	  <script>
+	    const countdownElement = document.getElementById('countdown');
+	    const homeSection = document.getElementById('home');
+	
+	    let countdown = 4;
+	
+	    const updateCountdown = () => {
+	      countdownElement.innerHTML = `${countdown}s`;
+	      countdown--;
+	
+	      if (countdown < 0) {
+	        clearInterval(countdownInterval);
+	        countdownElement.style.display = 'none'; // Hide the countdown
+	        homeSection.style.display = 'block'; // Show the home section
+	      }
+	    };
+	
+	    // Initial call to set the countdown
+	    updateCountdown();
+	
+	    // Update the countdown every 1 second
+	    const countdownInterval = setInterval(updateCountdown, 1000);
+	  </script>
 
 
+<header\>
 				
 				        <!-- Origen section start -->
 					<section id="origen">
