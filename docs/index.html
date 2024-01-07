@@ -108,9 +108,31 @@
 		<h1>Hello World</h1>
     <div id="countdown">4s</div>
   </header>
+  <script>
+    const countdownElement = document.getElementById('countdown');
+    const homeSection = document.getElementById('home');
 
+    let countdown = 4;
+
+    const updateCountdown = () => {
+      countdownElement.innerHTML = `${countdown}s`;
+      countdown--;
+
+      if (countdown < 0) {
+        clearInterval(countdownInterval);
+        countdownElement.style.display = 'none'; // Hide the countdown
+        homeSection.style.display = 'block'; // Show the home section
+      }
+    };
+
+    // Initial call to set the countdown
+    updateCountdown();
+
+    // Update the countdown every 1 second
+    const countdownInterval = setInterval(updateCountdown, 1000);
+  </script>
   <section id="home">
-    <h2>Welcome to My Home Section!</h2>
+    <h2>Welcome to My Family Album!</h2>
     <!-- Add your home content here -->
 	  <!-- Header
 	  	 	================================================== -->
@@ -149,35 +171,8 @@
 			      </p></h1>
 			
 	 </header> <!-- Header End -->
-	<hr>
+
   </section>
-
-  <script>
-    const countdownElement = document.getElementById('countdown');
-    const homeSection = document.getElementById('home');
-
-    let countdown = 4;
-
-    const updateCountdown = () => {
-      countdownElement.innerHTML = `${countdown}s`;
-      countdown--;
-
-      if (countdown < 0) {
-        clearInterval(countdownInterval);
-        countdownElement.style.display = 'none'; // Hide the countdown
-        homeSection.style.display = 'block'; // Show the home section
-      }
-    };
-
-    // Initial call to set the countdown
-    updateCountdown();
-
-    // Update the countdown every 1 second
-    const countdownInterval = setInterval(updateCountdown, 1000);
-  </script>
-
-		
-		
 	
 	   </div> <!-- end .main-col -->
 
