@@ -88,29 +88,7 @@
 		  
 	        </section>
 	
-	  <script>
-		    const countdownElement = document.getElementById('countdown');
-		    const homeSection = document.getElementById('home');
-		
-		    let countdown = 2;
-		
-		    const updateCountdown = () => {
-		      countdownElement.innerHTML = `${countdown}s`;
-		      countdown--;
-		
-		      if (countdown < 0) {
-		        clearInterval(countdownInterval);
-		        countdownElement.style.display = 'none'; // Hide the countdown
-		        homeSection.style.display = 'block'; // Show the home section
-		      }
-		    };
-		
-		    // Initial call to set the countdown
-		    updateCountdown();
-		
-		    // Update the countdown every 1 second
-		    const countdownInterval = setInterval(updateCountdown, 1000);
-	  </script>
+	  
 				
 				        <!-- Origen section start -->
 					<section id="origen">
