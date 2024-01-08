@@ -1,106 +1,78 @@
 <!DOCTYPE html>
-
 <html lang="en-US">
-<!--[if lt IE 8 ]><html class="no-js ie ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]><html class="no-js ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 8)|!(IE)]><!--><html class="no-js" lang="en"> <!--<![endif]-->
-
 <head>
-        
-		  <!--- Basic Page Needs
-		   ================================================== -->
-		            <meta charset="UTF-8">
-		            <title>My Family Album</title>
-		            <meta name="description" content="">
-			    <meta name="author" content="">
-			    <meta name="author" content="Roberto Siu">
-		            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		
-		<!-- Mobile Specific Metas
-		   ================================================== -->
-			<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">	
-		
-		<!-- CSS
-		    ================================================== -->
-		   <link rel="stylesheet" href="css/default.css">
-			<link rel="stylesheet" href="css/layout.css">
-		   <link rel="stylesheet" href="css/media-queries.css">
-		   <link rel="stylesheet" href="css/magnific-popup.css">
-		
-		 <!-- Favicons
-			================================================== -->
-			<link rel="shortcut icon" href="favicon.png" >	
-			
-		 <!-- Script
-		   ================================================== -->
-		   <script src="js/modernizr.js"></script>
-		   <script src="main.js"></script>
-		   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-		   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		
-		<! Script for background color = black >
-		
-		            <script>
-		            $(document).ready(function(){
-		            $("body").on({
-		            mouseenter: function(){
-		            $(this).css("background-color", "black");
-		              },
-		             });
-		            });
-		
-		            </script>
-		
-		<! Radio for my images with ccs style.>
-		
-		
-		           <style>
-		                   img {
-		                     border-radius: 14px;
-		                   }
-		           </style>
-		
-		<! Color Green for p - /p >
-		           <style>
-		            p{ color: green;
-		              font-side: 26px;
-		            }
-		           </style>
-		         
-		
-		<! Disabling Right Click Using HTML Body Tag >
-		                
-		<body oncontextmenu="return false;">
-		
+    <meta charset="UTF-8">
+    <title>My Family Album</title>
+    <meta name="description" content="">
+    <meta name="author" content="Roberto Siu">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	    <style>
-	    body {
-	      font-family: Arial, sans-serif;
-	      margin: 0;
-	      padding: 0;
-	    }
-	
-	    header {
-	      background-color: #333;
-	      color: #fff;
-	      text-align: center;
-	      padding: 20px;
-	    }
-	
-	    #countdown {
-	      font-size: 24px;
-	    }
-	
-	    #home {
-	      display: none;
-	      text-align: center;
-	      padding: 50px;
-	      background-color: #f0f0f0;
-	    }
-	  </style>
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/media-queries.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+
+    <!-- Favicons -->
+    <link rel="shortcut icon" href="favicon.png">
+
+    <!-- External Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="js/modernizr.js"></script>
+    <script src="main.js"></script>
+
+    <!-- Script for background color -->
+    <script>
+        $(document).ready(function () {
+            $("body").on({
+                mouseenter: function () {
+                    $(this).css("background-color", "black");
+                },
+            });
+        });
+    </script>
+
+    <!-- Countdown Script -->
+    <script>
+        $(document).ready(function () {
+            const countdownElement = $("#countdown");
+            const homeSection = $("#home");
+
+            let countdown = 2;
+
+            const updateCountdown = () => {
+                countdownElement.text(`${countdown}s`);
+                countdown--;
+
+                if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.hide();
+                    homeSection.show();
+                }
+            };
+
+            const countdownInterval = setInterval(updateCountdown, 1000);
+            updateCountdown(); // Initial call
+        });
+    </script>
+
+    <!-- Styles for Body -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
+<body oncontextmenu="return false;">
 
-	
+    <!-- Your HTML Content Goes Here -->
+
+
 <body>
 
 	<header>
