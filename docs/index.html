@@ -508,9 +508,7 @@
             Honduras: [
                 { Title: "San Pedro Sula Family Reunion", Path: "family.jpg", Badge: "ROOTS" },
                 { Title: "David 00", Path: "david0.jpg", Badge: "FAMILY" },
-                { Title: "David 01", Path: "david.jpg", Badge: "FAMILY" },
                 { Title: "David 02", Path: "david2.jpg", Badge: "FAMILY" },
-                { Title: "David 03", Path: "david3.jpg", Badge: "FAMILY" },
                 { Title: "David 04", Path: "david4.jpg", Badge: "FAMILY" },
                 { Title: "David 05", Path: "david5.jpg", Badge: "FAMILY" },
                 { Title: "David 06", Path: "david6.jpg", Badge: "FAMILY" },
@@ -589,6 +587,9 @@
                             <div class="play-button-icon">▶</div>
                         </div>
                     </div>
+                    <div class="media-info">
+                        <h4>${item.Title}</h4>
+                    </div>
                 `;
             } else {
                 mediaHtml = `
@@ -599,12 +600,7 @@
                 `;
             }
 
-            card.innerHTML = `
-                ${mediaHtml}
-                <div class="media-info">
-                    <h4>${item.Title}</h4>
-                </div>
-            `;
+            card.innerHTML = mediaHtml;
 
             if (onClickHandler) {
                 card.onclick = onClickHandler;
@@ -661,41 +657,4 @@
 
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('lightbox').classList.contains('active')) {
-                if (e.key === 'ArrowRight') nextLightboxImage();
-                if (e.key === 'ArrowLeft') prevLightboxImage();
-                if (e.key === 'Escape') closeLightbox();
-            }
-        });
-
-        function initVault() {
-            // Render Videos
-            const rowVideos = document.getElementById('row-videos');
-            const videoCatalogRow = document.getElementById('video-catalog-row');
-            vaultData.Videos.forEach(v => {
-                rowVideos.appendChild(createMediaTile(v, true));
-                videoCatalogRow.appendChild(createMediaTile(v, true));
-            });
-
-            // Helper to populate category rows
-            const populateCategory = (key, dashRowId, fullRowId) => {
-                const dashRow = document.getElementById(dashRowId);
-                const fullRow = document.getElementById(fullRowId);
-                const items = vaultData[key];
-                
-                items.forEach((item, idx) => {
-                    dashRow.appendChild(createMediaTile(item, false, () => openAlbumGallery(items, idx)));
-                    fullRow.appendChild(createMediaTile(item, false, () => openAlbumGallery(items, idx)));
-                });
-            };
-
-            populateCategory('Weddings', 'row-weddings', 'weddings-full-row');
-            populateCategory('Honduras', 'row-honduras', 'honduras-full-row');
-            populateCategory('Miami', 'row-miami', 'miami-full-row');
-            populateCategory('Siblings', 'row-siblings', 'siblings-full-row');
-            populateCategory('Parents', 'row-parents', 'parents-full-row');
-        }
-
-        window.addEventListener('DOMContentLoaded', initVault);
-    </script>
-</body>
-</html>
+                if (e.key === '
