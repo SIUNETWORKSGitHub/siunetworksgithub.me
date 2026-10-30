@@ -657,4 +657,41 @@
 
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('lightbox').classList.contains('active')) {
-                if (e.key === '
+                if (e.key === 'ArrowRight') nextLightboxImage();
+                if (e.key === 'ArrowLeft') prevLightboxImage();
+                if (e.key === 'Escape') closeLightbox();
+            }
+        });
+
+        function initVault() {
+            // Render Videos
+            const rowVideos = document.getElementById('row-videos');
+            const videoCatalogRow = document.getElementById('video-catalog-row');
+            vaultData.Videos.forEach(v => {
+                rowVideos.appendChild(createMediaTile(v, true));
+                videoCatalogRow.appendChild(createMediaTile(v, true));
+            });
+
+            // Helper to populate category rows
+            const populateCategory = (key, dashRowId, fullRowId) => {
+                const dashRow = document.getElementById(dashRowId);
+                const fullRow = document.getElementById(fullRowId);
+                const items = vaultData[key];
+                
+                items.forEach((item, idx) => {
+                    dashRow.appendChild(createMediaTile(item, false, () => openAlbumGallery(items, idx)));
+                    fullRow.appendChild(createMediaTile(item, false, () => openAlbumGallery(items, idx)));
+                });
+            };
+
+            populateCategory('Weddings', 'row-weddings', 'weddings-full-row');
+            populateCategory('Honduras', 'row-honduras', 'honduras-full-row');
+            populateCategory('Miami', 'row-miami', 'miami-full-row');
+            populateCategory('Siblings', 'row-siblings', 'siblings-full-row');
+            populateCategory('Parents', 'row-parents', 'parents-full-row');
+        }
+
+        window.addEventListener('DOMContentLoaded', initVault);
+    </script>
+</body>
+</html>
