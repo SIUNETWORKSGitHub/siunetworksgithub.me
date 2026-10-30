@@ -1,590 +1,701 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Siu Family Vault | Private Memories</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="shortcut icon" href="favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Siu Family Vault & Digital Heritage</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #273549;
+            --accent-teal: #0d9488;
+            --accent-glow: #14b8a6;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --card-radius: 12px;
+        }
 
-  <style>
-    :root {
-      --bg-dark: #0a0c10;
-      --card-bg: #141820;
-      --accent: #10b981;
-      --accent-glow: rgba(16, 185, 129, 0.25);
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --border-color: rgba(255, 255, 255, 0.08);
-      --radius: 12px;
-      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header-top h1 {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #14b8a6, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            letter-spacing: -0.5px;
+        }
 
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      overflow-x: hidden;
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-    }
+        .category-nav {
+            display: flex;
+            gap: 8px;
+            padding: 0 20px 12px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .category-nav::-webkit-scrollbar { display: none; }
+        .nav-pill {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 7px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+        .nav-pill:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .nav-pill.active {
+            background: var(--accent-teal);
+            color: white;
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 15px rgba(13, 148, 136, 0.4);
+        }
 
-    /* Top Navigation Bar */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(10, 12, 16, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+        main {
+            flex: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px 16px 40px;
+        }
 
-    .brand {
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+        .portal-section { display: none; animation: fadeIn 0.3s ease; }
+        .portal-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-    .brand span {
-      color: var(--accent);
-    }
+        .row-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin: 24px 0 12px;
+        }
+        .row-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .row-header span {
+            font-size: 12px;
+            color: var(--accent-glow);
+            font-weight: 600;
+            cursor: pointer;
+        }
 
-    .nav-tags {
-      display: flex;
-      gap: 0.75rem;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .nav-tags::-webkit-scrollbar { display: none; }
+        .netflix-row {
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 12px;
+            scrollbar-width: thin;
+            scrollbar-color: #334155 transparent;
+            -webkit-overflow-scrolling: touch;
+        }
+        .netflix-row::-webkit-scrollbar { height: 6px; }
+        .netflix-row::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
 
-    .nav-tag {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.8rem;
-      padding: 0.4rem 0.85rem;
-      border-radius: 9999px;
-      white-space: nowrap;
-      transition: var(--transition);
-    }
+        .media-card {
+            flex: 0 0 240px;
+            scroll-snap-align: start;
+            background: var(--bg-card);
+            border-radius: var(--card-radius);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+        }
+        @media (max-width: 600px) {
+            .media-card { flex: 0 0 170px; }
+        }
+        .media-card:hover {
+            transform: scale(1.03);
+            border-color: var(--accent-glow);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+        .media-poster {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+        .media-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s;
+        }
+        .media-card:hover .media-poster img {
+            transform: scale(1.05);
+        }
+        .media-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 6px;
+            border-radius: 4px;
+            color: #fff;
+            z-index: 3;
+        }
+        .media-play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.25);
+            transition: background 0.2s;
+            z-index: 2;
+        }
+        .media-card:hover .media-play-overlay {
+            background: rgba(0, 0, 0, 0.45);
+        }
+        .play-button-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(13, 148, 136, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+            transition: transform 0.2s, background 0.2s;
+        }
+        .media-card:hover .play-button-icon {
+            transform: scale(1.1);
+            background: var(--accent-glow);
+        }
 
-    .nav-tag:hover {
-      color: var(--text-main);
-      border-color: var(--accent);
-    }
+        .media-info {
+            padding: 10px 12px;
+        }
+        .media-info h4 {
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-primary);
+        }
 
-    /* Hero Section */
-    .hero {
-      padding: 4rem 2rem 2rem;
-      text-align: center;
-      max-width: 800px;
-      margin: 0 auto;
-    }
+        /* Video Showcase */
+        .video-player-container {
+            width: 100%;
+            background: #000;
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+        .video-iframe-wrapper {
+            position: relative;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            width: 100%;
+            background: #000;
+        }
+        .video-iframe-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .player-bar {
+            padding: 12px 16px;
+            background: var(--bg-card);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
 
-    .hero-badge {
-      display: inline-block;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--accent);
-      background: var(--accent-glow);
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      margin-bottom: 1rem;
-      font-weight: 600;
-    }
+        /* Lightbox Modal */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .lightbox-modal.active { display: flex; }
+        .lightbox-modal img {
+            max-width: 90vw;
+            max-height: 80vh;
+            border-radius: 8px;
+            object-fit: contain;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            color: #fff;
+            font-size: 36px;
+            cursor: pointer;
+            z-index: 2010;
+        }
+        .lightbox-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(15, 23, 42, 0.7);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            z-index: 2010;
+        }
+        .lightbox-nav-btn:hover {
+            background: var(--accent-teal);
+            border-color: var(--accent-glow);
+        }
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
+        @media (max-width: 600px) {
+            .lightbox-prev { left: 10px; width: 40px; height: 40px; font-size: 20px; }
+            .lightbox-next { right: 10px; width: 40px; height: 40px; font-size: 20px; }
+        }
+        .lightbox-caption-box {
+            position: absolute;
+            bottom: 24px;
+            text-align: center;
+            color: #fff;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            border: 1px solid var(--border-color);
+        }
 
-    .hero h1 {
-      font-size: 2.75rem;
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 0.75rem;
-    }
-
-    .hero p {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-    }
-
-    /* Container & Section Architecture */
-    .vault-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem 5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 4rem;
-    }
-
-    .album-section {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .album-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 0.75rem;
-    }
-
-    .album-title h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    .album-title p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .carousel-controls {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .btn-ctrl {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: var(--transition);
-    }
-
-    .btn-ctrl:hover {
-      background: var(--accent);
-      color: #000;
-      border-color: var(--accent);
-    }
-
-    /* Responsive Carousels */
-    .carousel-viewport {
-      display: flex;
-      gap: 1.25rem;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      padding: 0.5rem 0 1rem;
-      scrollbar-width: thin;
-      scrollbar-color: var(--border-color) transparent;
-    }
-
-    .carousel-viewport::-webkit-scrollbar {
-      height: 6px;
-    }
-    .carousel-viewport::-webkit-scrollbar-thumb {
-      background: var(--border-color);
-      border-radius: 3px;
-    }
-
-    /* Media Cards */
-    .media-card {
-      flex: 0 0 280px;
-      scroll-snap-align: start;
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      border: 1px solid var(--border-color);
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .media-card.video-card {
-      flex: 0 0 420px;
-    }
-
-    .media-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(16, 185, 129, 0.4);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
-    }
-
-    .card-thumb {
-      width: 100%;
-      height: 280px;
-      object-fit: cover;
-      display: block;
-      background: #111;
-      transition: transform 0.4s ease;
-    }
-
-    .media-card:hover .card-thumb {
-      transform: scale(1.03);
-    }
-
-    .video-wrapper {
-      position: relative;
-      width: 100%;
-      padding-top: 56.25%; /* 16:9 Aspect Ratio */
-      background: #000;
-    }
-
-    .video-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-
-    .card-meta {
-      padding: 0.75rem 1rem;
-      background: var(--card-bg);
-      border-top: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .card-meta span {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--text-muted);
-    }
-
-    /* Lightbox Modal */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      background: rgba(5, 7, 10, 0.95);
-      backdrop-filter: blur(8px);
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-
-    .lightbox.active {
-      display: flex;
-    }
-
-    .lightbox-content {
-      max-width: 90vw;
-      max-height: 85vh;
-      border-radius: var(--radius);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-      border: 1px solid var(--border-color);
-    }
-
-    .lightbox-close {
-      position: absolute;
-      top: 1.5rem;
-      right: 2rem;
-      font-size: 2rem;
-      color: var(--text-main);
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-
-    footer {
-      border-top: 1px solid var(--border-color);
-      padding: 3rem 1rem;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 2rem; }
-      .media-card { flex: 0 0 220px; }
-      .media-card.video-card { flex: 0 0 85vw; }
-      .card-thumb { height: 220px; }
-    }
-  </style>
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            background: #090d16;
+        }
+    </style>
 </head>
 <body oncontextmenu="return false;">
 
-  <!-- Main Navigation -->
-  <header>
-    <div class="brand">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent)"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-      SIU <span>VAULT</span>
+    <header class="app-header">
+        <div class="header-top">
+            <h1 onclick="switchSection('all')">Siu Family Vault</h1>
+            <span style="font-size: 12px; color: var(--text-secondary);">Private Media Archive</span>
+        </div>
+        <nav class="category-nav">
+            <button id="btn-all" class="nav-pill active" onclick="switchSection('all')">Browse All</button>
+            <button id="btn-videos" class="nav-pill" onclick="switchSection('videos')">Videos & Films</button>
+            <button id="btn-weddings" class="nav-pill" onclick="switchSection('weddings')">Weddings & Love</button>
+            <button id="btn-honduras" class="nav-pill" onclick="switchSection('honduras')">Honduras Roots</button>
+            <button id="btn-miami" class="nav-pill" onclick="switchSection('miami')">Miami & Kids</button>
+            <button id="btn-siblings" class="nav-pill" onclick="switchSection('siblings')">Brothers & Sisters</button>
+            <button id="btn-parents" class="nav-pill" onclick="switchSection('parents')">Parents & Legacy</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- BROWSE ALL / NETFLIX DASHBOARD -->
+        <section id="section-all" class="portal-section active">
+            <div class="row-header">
+                <h3>🎬 Featured Family Films</h3>
+                <span onclick="switchSection('videos')">View Video Player &rarr;</span>
+            </div>
+            <div id="row-videos" class="netflix-row"></div>
+
+            <div class="row-header">
+                <h3>💍 Weddings & Love Forever</h3>
+                <span onclick="switchSection('weddings')">See All &rarr;</span>
+            </div>
+            <div id="row-weddings" class="netflix-row"></div>
+
+            <div class="row-header">
+                <h3>🇭🇳 San Pedro Sula & Honduras Family</h3>
+                <span onclick="switchSection('honduras')">See All &rarr;</span>
+            </div>
+            <div id="row-honduras" class="netflix-row"></div>
+
+            <div class="row-header">
+                <h3>🌴 Miami Family & The Kids</h3>
+                <span onclick="switchSection('miami')">See All &rarr;</span>
+            </div>
+            <div id="row-miami" class="netflix-row"></div>
+
+            <div class="row-header">
+                <h3>👥 Brothers & Sisters</h3>
+                <span onclick="switchSection('siblings')">See All &rarr;</span>
+            </div>
+            <div id="row-siblings" class="netflix-row"></div>
+
+            <div class="row-header">
+                <h3>❤️ Parents & Legacy</h3>
+                <span onclick="switchSection('parents')">See All &rarr;</span>
+            </div>
+            <div id="row-parents" class="netflix-row"></div>
+        </section>
+
+        <!-- VIDEOS SECTION -->
+        <section id="section-videos" class="portal-section">
+            <div class="video-player-container">
+                <div class="video-iframe-wrapper">
+                    <iframe id="mainIframePlayer" src="https://www.youtube.com/embed/2D3rHOzWeEc" title="Declaration of Love" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                </div>
+                <div class="player-bar">
+                    <span><strong>Now Playing:</strong> <span id="currentVideoTitle" style="color: var(--accent-glow);">Declaration of Love</span></span>
+                    <span style="font-size: 11px; color: var(--text-secondary);">YouTube 1080p Stream</span>
+                </div>
+            </div>
+
+            <div class="row-header">
+                <h3>Select From Video Vault</h3>
+            </div>
+            <div id="video-catalog-row" class="netflix-row"></div>
+        </section>
+
+        <!-- WEDDINGS & LOVE SECTION -->
+        <section id="section-weddings" class="portal-section">
+            <div class="row-header">
+                <h3>💍 Weddings & Love Forever</h3>
+                <span onclick="switchSection('all')">&larr; Back to Dashboard</span>
+            </div>
+            <div id="weddings-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
+        </section>
+
+        <!-- HONDURAS SECTION -->
+        <section id="section-honduras" class="portal-section">
+            <div class="row-header">
+                <h3>🇭🇳 Family in Honduras</h3>
+                <span onclick="switchSection('all')">&larr; Back to Dashboard</span>
+            </div>
+            <div id="honduras-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
+        </section>
+
+        <!-- MIAMI & KIDS SECTION -->
+        <section id="section-miami" class="portal-section">
+            <div class="row-header">
+                <h3>🌴 Miami Family & The Kids</h3>
+                <span onclick="switchSection('all')">&larr; Back to Dashboard</span>
+            </div>
+            <div id="miami-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
+        </section>
+
+        <!-- SIBLINGS SECTION -->
+        <section id="section-siblings" class="portal-section">
+            <div class="row-header">
+                <h3>👥 Brothers & Sisters</h3>
+                <span onclick="switchSection('all')">&larr; Back to Dashboard</span>
+            </div>
+            <div id="siblings-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
+        </section>
+
+        <!-- PARENTS SECTION -->
+        <section id="section-parents" class="portal-section">
+            <div class="row-header">
+                <h3>❤️ Parents & Lifelong Legacy</h3>
+                <span onclick="switchSection('all')">&larr; Back to Dashboard</span>
+            </div>
+            <div id="parents-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
+        </section>
+    </main>
+
+    <!-- FULLSCREEN LIGHTBOX WITH GALLERY NAVIGATION -->
+    <div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <div class="lightbox-nav-btn lightbox-prev" onclick="prevLightboxImage(event)">&#10094;</div>
+        <img id="lightboxImg" src="" alt="Full view" onclick="event.stopPropagation()">
+        <div class="lightbox-nav-btn lightbox-next" onclick="nextLightboxImage(event)">&#10095;</div>
+        <div class="lightbox-caption-box" id="lightboxCaption"></div>
     </div>
-    <div class="nav-tags">
-      <a href="#wedding" class="nav-tag">Weddings</a>
-      <a href="#love" class="nav-tag">Love Forever</a>
-      <a href="#honduras" class="nav-tag">Honduras</a>
-      <a href="#miami" class="nav-tag">Miami & Kids</a>
-      <a href="#siblings" class="nav-tag">Siblings</a>
-      <a href="#parents" class="nav-tag">Parents</a>
-    </div>
-  </header>
 
-  <!-- Hero Header -->
-  <div class="hero">
-    <div class="hero-badge">Private Archive</div>
-    <h1>The Siu Family Vault</h1>
-    <p>A personal repository of milestones, journeys, and cherished memories across Honduras and Miami.</p>
-  </div>
+    <footer>
+        &copy; Siu Family Digital Heritage &bull; siunetworksgithub.me
+    </footer>
 
-  <main class="vault-container">
+    <script>
+        const vaultData = {
+            Videos: [
+                { Title: "Declaration of Love", Path: "https://www.youtube.com/embed/2D3rHOzWeEc", Poster: "mywife.jpg", Badge: "VIDEO" },
+                { Title: "Bendecido 2022", Path: "https://www.youtube.com/embed/ZXb8Xzcnmcg", Poster: "family.jpg", Badge: "VIDEO" },
+                { Title: "Santi Cumpleaños", Path: "https://www.youtube.com/embed/JoYXJgyO0uI", Poster: "thebrothers.jpg", Badge: "VIDEO" },
+                { Title: "I Really Love My Family", Path: "https://www.youtube.com/embed/k-fCSQlG_UA", Poster: "mymother2.jpg", Badge: "VIDEO" }
+            ],
+            Weddings: [
+                { Title: "My Beautiful Wife (Rosa Iris)", Path: "mywife.jpg", Badge: "BRIDE" },
+                { Title: "Wedding Milestone 01", Path: "boda.jpg", Badge: "BODA" },
+                { Title: "Wedding Milestone 02", Path: "boda2.jpg", Badge: "BODA" },
+                { Title: "Wedding Milestone 03", Path: "boda3.jpg", Badge: "BODA" },
+                { Title: "Wedding Milestone 04", Path: "boda4.jpg", Badge: "BODA" },
+                { Title: "Wedding Milestone 05", Path: "boda5.jpg", Badge: "BODA" },
+                { Title: "Wedding Milestone 06", Path: "boda6.jpg", Badge: "BODA" },
+                { Title: "Wedding Milestone 07", Path: "boda7.jpg", Badge: "BODA" },
+                { Title: "Wedding Milestone 08", Path: "boda8.jpg", Badge: "BODA" },
+                { Title: "Love Forever", Path: "thelove.jpg", Badge: "LOVE" },
+                { Title: "Love 02", Path: "thelove2.jpg", Badge: "LOVE" },
+                { Title: "Love 04", Path: "thelove4.jpg", Badge: "LOVE" },
+                { Title: "Love 05", Path: "thelove5.jpg", Badge: "LOVE" },
+                { Title: "Love 06", Path: "thelove6.jpg", Badge: "LOVE" },
+                { Title: "Love 07", Path: "thelove7.jpg", Badge: "LOVE" },
+                { Title: "Love 08", Path: "thelove8.jpg", Badge: "LOVE" },
+                { Title: "Animated Celebration", Path: "PPS24_1.gif", Badge: "GIF" },
+                { Title: "Kiss 01", Path: "kiss.jpg", Badge: "KISS" },
+                { Title: "Kiss 02", Path: "kiss2.jpg", Badge: "KISS" },
+                { Title: "Kiss 03", Path: "kiss3.jpg", Badge: "KISS" },
+                { Title: "Kiss 04", Path: "kiss4.jpg", Badge: "KISS" },
+                { Title: "Kiss 05", Path: "kiss5.jpg", Badge: "KISS" }
+            ],
+            Honduras: [
+                { Title: "San Pedro Sula Family Reunion", Path: "family.jpg", Badge: "ROOTS" },
+                { Title: "David 00", Path: "david0.jpg", Badge: "FAMILY" },
+                { Title: "David 01", Path: "david.jpg", Badge: "FAMILY" },
+                { Title: "David 02", Path: "david2.jpg", Badge: "FAMILY" },
+                { Title: "David 03", Path: "david3.jpg", Badge: "FAMILY" },
+                { Title: "David 04", Path: "david4.jpg", Badge: "FAMILY" },
+                { Title: "David 05", Path: "david5.jpg", Badge: "FAMILY" },
+                { Title: "David 06", Path: "david6.jpg", Badge: "FAMILY" },
+                { Title: "David 07", Path: "david7.jpg", Badge: "FAMILY" },
+                { Title: "David 08", Path: "david8.jpg", Badge: "FAMILY" }
+            ],
+            Miami: [
+                { Title: "Miami Family Cover", Path: "miamifamily.jpg", Badge: "MIAMI" },
+                { Title: "Miami Family 02", Path: "miamifamily2.jpg", Badge: "MIAMI" },
+                { Title: "Miami Family 03", Path: "miamifamily3.jpg", Badge: "MIAMI" },
+                { Title: "Miami Family 04", Path: "miamifamily4.jpg", Badge: "MIAMI" },
+                { Title: "The Little Kids Cover", Path: "thekids.jpg", Badge: "KIDS" },
+                { Title: "The Kids 02", Path: "thekids2.jpg", Badge: "KIDS" },
+                { Title: "The Kids 03", Path: "thekids3.jpg", Badge: "KIDS" },
+                { Title: "The Kids 04", Path: "thekids4.jpg", Badge: "KIDS" },
+                { Title: "The Kids 05", Path: "thekids5.jpg", Badge: "KIDS" }
+            ],
+            Siblings: [
+                { Title: "Brothers & Sisters Cover", Path: "thebrothers.jpg", Badge: "SIBLINGS" },
+                { Title: "Jesenia 02", Path: "jesenia2.jpg", Badge: "JESENIA" },
+                { Title: "Jesenia 03", Path: "jesenia3.jpg", Badge: "JESENIA" },
+                { Title: "Jesenia 04", Path: "jesenia4.jpg", Badge: "JESENIA" },
+                { Title: "Jesenia 05", Path: "jesenia5.jpg", Badge: "JESENIA" },
+                { Title: "Jesenia 06", Path: "jesenia6.jpg", Badge: "JESENIA" },
+                { Title: "Jesenia 07", Path: "jesenia7.jpg", Badge: "JESENIA" },
+                { Title: "Lesly 01", Path: "lesly.jpg", Badge: "LESLY" },
+                { Title: "Lesly 02", Path: "lesly2.jpg", Badge: "LESLY" },
+                { Title: "Lesly 03", Path: "lesly3.jpg", Badge: "LESLY" },
+                { Title: "Lesly 04", Path: "lesly4.jpg", Badge: "LESLY" },
+                { Title: "Lesly 05", Path: "lesly5.jpg", Badge: "LESLY" },
+                { Title: "Roniel 01", Path: "roniel1.jpg", Badge: "RONIEL" },
+                { Title: "Roniel 02", Path: "roniel2.jpg", Badge: "RONIEL" },
+                { Title: "Roniel 03", Path: "roniel3.jpg", Badge: "RONIEL" },
+                { Title: "Roniel 04", Path: "roniel4.jpg", Badge: "RONIEL" },
+                { Title: "Roniel 05", Path: "roniel5.jpg", Badge: "RONIEL" },
+                { Title: "Roniel 06", Path: "roniel6.jpg", Badge: "RONIEL" },
+                { Title: "Roniel 07", Path: "roniel7.jpg", Badge: "RONIEL" }
+            ],
+            Parents: [
+                { Title: "Beloved Mother 02", Path: "mymother2.jpg", Badge: "MOTHER" },
+                { Title: "Beloved Mother 01", Path: "mymother.jpg", Badge: "MOTHER" },
+                { Title: "Beloved Mother 03", Path: "mymother3.jpg", Badge: "MOTHER" },
+                { Title: "Beloved Father 01", Path: "myfather.jpg", Badge: "FATHER" },
+                { Title: "Beloved Father 02", Path: "myfather2.jpg", Badge: "FATHER" },
+                { Title: "Parents Collection 02", Path: "myfathers2.jpg", Badge: "PARENTS" },
+                { Title: "Parents Collection 03", Path: "myfathers3.jpg", Badge: "PARENTS" }
+            ]
+        };
 
-    <!-- 1. Declaration Day & Wedding -->
-    <section id="wedding" class="album-section">
-      <div class="album-header">
-        <div class="album-title">
-          <h2>Declaration Day & Wedding</h2>
-          <p>The sacred foundation of our home and marriage</p>
-        </div>
-        <div class="carousel-controls">
-          <button class="btn-ctrl" onclick="scrollCarousel('carousel-wedding', -320)" aria-label="Previous">&#8592;</button>
-          <button class="btn-ctrl" onclick="scrollCarousel('carousel-wedding', 320)" aria-label="Next">&#8594;</button>
-        </div>
-      </div>
+        let activeGalleryList = [];
+        let activeGalleryIndex = 0;
 
-      <div class="carousel-viewport" id="carousel-wedding">
-        <div class="media-card video-card">
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/2D3rHOzWeEc" title="Declaration of Love" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          </div>
-          <div class="card-meta"><span>Declaration of Love (Film)</span><span>Video</span></div>
-        </div>
-        <div class="media-card" onclick="openLightbox('mywife.jpg')"><img class="card-thumb" src="mywife.jpg" alt="My Wife" loading="lazy"><div class="card-meta"><span>My Beautiful Wife</span><span>Rosa Iris</span></div></div>
-        <div class="media-card" onclick="openLightbox('boda.jpg')"><img class="card-thumb" src="boda.jpg" alt="Boda" loading="lazy"><div class="card-meta"><span>Wedding Milestone</span><span>Boda 01</span></div></div>
-        <div class="media-card" onclick="openLightbox('boda2.jpg')"><img class="card-thumb" src="boda2.jpg" alt="Boda" loading="lazy"><div class="card-meta"><span>Wedding Milestone</span><span>Boda 02</span></div></div>
-        <div class="media-card" onclick="openLightbox('boda3.jpg')"><img class="card-thumb" src="boda3.jpg" alt="Boda" loading="lazy"><div class="card-meta"><span>Wedding Milestone</span><span>Boda 03</span></div></div>
-        <div class="media-card" onclick="openLightbox('boda4.jpg')"><img class="card-thumb" src="boda4.jpg" alt="Boda" loading="lazy"><div class="card-meta"><span>Celebration</span><span>Boda 04</span></div></div>
-        <div class="media-card" onclick="openLightbox('boda5.jpg')"><img class="card-thumb" src="boda5.jpg" alt="Boda" loading="lazy"><div class="card-meta"><span>Celebration</span><span>Boda 05</span></div></div>
-        <div class="media-card" onclick="openLightbox('boda6.jpg')"><img class="card-thumb" src="boda6.jpg" alt="Boda" loading="lazy"><div class="card-meta"><span>Celebration</span><span>Boda 06</span></div></div>
-        <div class="media-card" onclick="openLightbox('boda7.jpg')"><img class="card-thumb" src="boda7.jpg" alt="Boda" loading="lazy"><div class="card-meta"><span>Celebration</span><span>Boda 07</span></div></div>
-        <div class="media-card" onclick="openLightbox('boda8.jpg')"><img class="card-thumb" src="boda8.jpg" alt="Boda" loading="lazy"><div class="card-meta"><span>Celebration</span><span>Boda 08</span></div></div>
-      </div>
-    </section>
+        function switchSection(secId) {
+            document.querySelectorAll('.portal-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
 
-    <!-- 2. Love Forever & Moments -->
-    <section id="love" class="album-section">
-      <div class="album-header">
-        <div class="album-title">
-          <h2>Love Forever</h2>
-          <p>Unconditional journey, shared dreams, and partnership</p>
-        </div>
-        <div class="carousel-controls">
-          <button class="btn-ctrl" onclick="scrollCarousel('carousel-love', -320)" aria-label="Previous">&#8592;</button>
-          <button class="btn-ctrl" onclick="scrollCarousel('carousel-love', 320)" aria-label="Next">&#8594;</button>
-        </div>
-      </div>
+            const sec = document.getElementById('section-' + secId);
+            const btn = document.getElementById('btn-' + secId);
+            if (sec) sec.classList.add('active');
+            if (btn) btn.classList.add('active');
 
-      <div class="carousel-viewport" id="carousel-love">
-        <div class="media-card" onclick="openLightbox('thelove.jpg')"><img class="card-thumb" src="thelove.jpg" alt="Love Forever" loading="lazy"><div class="card-meta"><span>Love Forever</span><span>Feature</span></div></div>
-        <div class="media-card" onclick="openLightbox('kiss.jpg')"><img class="card-thumb" src="kiss.jpg" alt="Kiss" loading="lazy"><div class="card-meta"><span>Cherished Moments</span><span>Kiss 01</span></div></div>
-        <div class="media-card" onclick="openLightbox('thelove2.jpg')"><img class="card-thumb" src="thelove2.jpg" alt="Love" loading="lazy"><div class="card-meta"><span>Journey</span><span>Love 02</span></div></div>
-        <div class="media-card" onclick="openLightbox('thelove4.jpg')"><img class="card-thumb" src="thelove4.jpg" alt="Love" loading="lazy"><div class="card-meta"><span>Journey</span><span>Love 04</span></div></div>
-        <div class="media-card" onclick="openLightbox('thelove5.jpg')"><img class="card-thumb" src="thelove5.jpg" alt="Love" loading="lazy"><div class="card-meta"><span>Journey</span><span>Love 05</span></div></div>
-        <div class="media-card" onclick="openLightbox('thelove6.jpg')"><img class="card-thumb" src="thelove6.jpg" alt="Love" loading="lazy"><div class="card-meta"><span>Journey</span><span>Love 06</span></div></div>
-        <div class="media-card" onclick="openLightbox('thelove7.jpg')"><img class="card-thumb" src="thelove7.jpg" alt="Love" loading="lazy"><div class="card-meta"><span>Journey</span><span>Love 07</span></div></div>
-        <div class="media-card" onclick="openLightbox('thelove8.jpg')"><img class="card-thumb" src="thelove8.jpg" alt="Love" loading="lazy"><div class="card-meta"><span>Journey</span><span>Love 08</span></div></div>
-        <div class="media-card" onclick="openLightbox('PPS24_1.gif')"><img class="card-thumb" src="PPS24_1.gif" alt="Animated Celebration" loading="lazy"><div class="card-meta"><span>Celebration</span><span>Animation</span></div></div>
-        <div class="media-card" onclick="openLightbox('kiss2.jpg')"><img class="card-thumb" src="kiss2.jpg" alt="Kiss" loading="lazy"><div class="card-meta"><span>Memories</span><span>Kiss 02</span></div></div>
-        <div class="media-card" onclick="openLightbox('kiss3.jpg')"><img class="card-thumb" src="kiss3.jpg" alt="Kiss" loading="lazy"><div class="card-meta"><span>Memories</span><span>Kiss 03</span></div></div>
-        <div class="media-card" onclick="openLightbox('kiss4.jpg')"><img class="card-thumb" src="kiss4.jpg" alt="Kiss" loading="lazy"><div class="card-meta"><span>Memories</span><span>Kiss 04</span></div></div>
-        <div class="media-card" onclick="openLightbox('kiss5.jpg')"><img class="card-thumb" src="kiss5.jpg" alt="Kiss" loading="lazy"><div class="card-meta"><span>Memories</span><span>Kiss 05</span></div></div>
-      </div>
-    </section>
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-    <!-- 3. Family in Honduras & Roots -->
-    <section id="honduras" class="album-section">
-      <div class="album-header">
-        <div class="album-title">
-          <h2>Family Roots & Honduras</h2>
-          <p>San Pedro Sula memories and blessed reunions</p>
-        </div>
-        <div class="carousel-controls">
-          <button class="btn-ctrl" onclick="scrollCarousel('carousel-honduras', -320)" aria-label="Previous">&#8592;</button>
-          <button class="btn-ctrl" onclick="scrollCarousel('carousel-honduras', 320)" aria-label="Next">&#8594;</button>
-        </div>
-      </div>
+        function createMediaTile(item, isVideo, onClickHandler) {
+            const card = document.createElement('div');
+            card.className = 'media-card';
+            
+            let mediaHtml = '';
+            if (isVideo) {
+                mediaHtml = `
+                    <div class="media-poster">
+                        <span class="media-badge">${item.Badge || 'VIDEO'}</span>
+                        <img src="${item.Poster}" alt="${item.Title}" loading="lazy">
+                        <div class="media-play-overlay">
+                            <div class="play-button-icon">▶</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                mediaHtml = `
+                    <div class="media-poster">
+                        <span class="media-badge">${item.Badge || 'PHOTO'}</span>
+                        <img src="${item.Path}" alt="${item.Title}" loading="lazy">
+                    </div>
+                `;
+            }
 
-      <div class="carousel-viewport" id="carousel-honduras">
-        <div class="media-card video-card">
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/ZXb8Xzcnmcg" title="Bendecido 2022" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          </div>
-          <div class="card-meta"><span>Bendecido 2022</span><span>Film</span></div>
-        </div>
-        <div class="media-card" onclick="openLightbox('family.jpg')"><img class="card-thumb" src="family.jpg" alt="Family" loading="lazy"><div class="card-meta"><span>Family Gathering</span><span>San Pedro Sula</span></div></div>
-        <div class="media-card" onclick="openLightbox('david0.jpg')"><img class="card-thumb" src="david0.jpg" alt="David Family" loading="lazy"><div class="card-meta"><span>David Family</span><span>00</span></div></div>
-        <div class="media-card" onclick="openLightbox('david.jpg')"><img class="card-thumb" src="david.jpg" alt="David Family" loading="lazy"><div class="card-meta"><span>David Family</span><span>01</span></div></div>
-        <div class="media-card" onclick="openLightbox('david2.jpg')"><img class="card-thumb" src="david2.jpg" alt="David Family" loading="lazy"><div class="card-meta"><span>David Family</span><span>02</span></div></div>
-        <div class="media-card" onclick="openLightbox('david3.jpg')"><img class="card-thumb" src="david3.jpg" alt="David Family" loading="lazy"><div class="card-meta"><span>David Family</span><span>03</span></div></div>
-        <div class="media-card" onclick="openLightbox('david4.jpg')"><img class="card-thumb" src="david4.jpg" alt="David Family" loading="lazy"><div class="card-meta"><span>David Family</span><span>04</span></div></div>
-        <div class="media-card" onclick="openLightbox('david5.jpg')"><img class="card-thumb" src="david5.jpg" alt="David Family" loading="lazy"><div class="card-meta"><span>David Family</span><span>05</span></div></div>
-        <div class="media-card" onclick="openLightbox('david6.jpg')"><img class="card-thumb" src="david6.jpg" alt="David Family" loading="lazy"><div class="card-meta"><span>David Family</span><span>06</span></div></div>
-        <div class="media-card" onclick="openLightbox('david7.jpg')"><img class="card-thumb" src="david7.jpg" alt="David Family" loading="lazy"><div class="card-meta"><span>David Family</span><span>07</span></div></div>
-        <div class="media-card" onclick="openLightbox('david8.jpg')"><img class="card-thumb" src="david8.jpg" alt="David Family" loading="lazy"><div class="card-meta"><span>David Family</span><span>08</span></div></div>
-      </div>
-    </section>
+            card.innerHTML = `
+                ${mediaHtml}
+                <div class="media-info">
+                    <h4>${item.Title}</h4>
+                </div>
+            `;
 
-    <!-- 4. Miami Family & The Kids -->
-    <section id="miami" class="album-section">
-      <div class="album-header">
-        <div class="album-title">
-          <h2>Miami Family & The Kids</h2>
-          <p>Our life and the rising generation here in South Florida</p>
-        </div>
-        <div class="carousel-controls">
-          <button class="btn-ctrl" onclick="scrollCarousel('carousel-miami', -320)" aria-label="Previous">&#8592;</button>
-          <button class="btn-ctrl" onclick="scrollCarousel('carousel-miami', 320)" aria-label="Next">&#8594;</button>
-        </div>
-      </div>
+            if (onClickHandler) {
+                card.onclick = onClickHandler;
+            } else if (isVideo) {
+                card.onclick = () => playSelectedVideo(item.Path, item.Title);
+            } else {
+                card.onclick = () => openAlbumGallery([item], 0);
+            }
+            return card;
+        }
 
-      <div class="carousel-viewport" id="carousel-miami">
-        <div class="media-card" onclick="openLightbox('miamifamily.jpg')"><img class="card-thumb" src="miamifamily.jpg" alt="Miami Family" loading="lazy"><div class="card-meta"><span>Miami Home</span><span>Cover</span></div></div>
-        <div class="media-card" onclick="openLightbox('miamifamily2.jpg')"><img class="card-thumb" src="miamifamily2.jpg" alt="Miami Family" loading="lazy"><div class="card-meta"><span>Miami Home</span><span>02</span></div></div>
-        <div class="media-card" onclick="openLightbox('miamifamily3.jpg')"><img class="card-thumb" src="miamifamily3.jpg" alt="Miami Family" loading="lazy"><div class="card-meta"><span>Miami Home</span><span>03</span></div></div>
-        <div class="media-card" onclick="openLightbox('miamifamily4.jpg')"><img class="card-thumb" src="miamifamily4.jpg" alt="Miami Family" loading="lazy"><div class="card-meta"><span>Miami Home</span><span>04</span></div></div>
-        <div class="media-card" onclick="openLightbox('thekids.jpg')"><img class="card-thumb" src="thekids.jpg" alt="Kids" loading="lazy"><div class="card-meta"><span>The Little Kids</span><span>Cover</span></div></div>
-        <div class="media-card" onclick="openLightbox('thekids2.jpg')"><img class="card-thumb" src="thekids2.jpg" alt="Kids" loading="lazy"><div class="card-meta"><span>The Little Kids</span><span>02</span></div></div>
-        <div class="media-card" onclick="openLightbox('thekids3.jpg')"><img class="card-thumb" src="thekids3.jpg" alt="Kids" loading="lazy"><div class="card-meta"><span>The Little Kids</span><span>03</span></div></div>
-        <div class="media-card" onclick="openLightbox('thekids4.jpg')"><img class="card-thumb" src="thekids4.jpg" alt="Kids" loading="lazy"><div class="card-meta"><span>The Little Kids</span><span>04</span></div></div>
-        <div class="media-card" onclick="openLightbox('thekids5.jpg')"><img class="card-thumb" src="thekids5.jpg" alt="Kids" loading="lazy"><div class="card-meta"><span>The Little Kids</span><span>05</span></div></div>
-      </div>
-    </section>
+        function playSelectedVideo(embedUrl, title) {
+            const iframe = document.getElementById('mainIframePlayer');
+            const titleEl = document.getElementById('currentVideoTitle');
+            iframe.src = embedUrl;
+            titleEl.textContent = title;
+            switchSection('videos');
+        }
 
-    <!-- 5. Brothers & Sisters -->
-    <section id="siblings" class="album-section">
-      <div class="album-header">
-        <div class="album-title">
-          <h2>Brothers & Sisters</h2>
-          <p>Jesenia, Lesly, Roniel, and family celebrations</p>
-        </div>
-        <div class="carousel-controls">
-          <button class="btn-ctrl" onclick="scrollCarousel('carousel-siblings', -320)" aria-label="Previous">&#8592;</button>
-          <button class="btn-ctrl" onclick="scrollCarousel('carousel-siblings', 320)" aria-label="Next">&#8594;</button>
-        </div>
-      </div>
+        function openAlbumGallery(images, startIndex = 0) {
+            if (!images || !images.length) return;
+            activeGalleryList = images;
+            activeGalleryIndex = startIndex;
+            showCurrentImage();
+            document.getElementById('lightbox').classList.add('active');
+        }
 
-      <div class="carousel-viewport" id="carousel-siblings">
-        <div class="media-card video-card">
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/JoYXJgyO0uI" title="Santi Cumpleanos" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          </div>
-          <div class="card-meta"><span>Santi Cumpleaños</span><span>Celebration</span></div>
-        </div>
-        <div class="media-card" onclick="openLightbox('thebrothers.jpg')"><img class="card-thumb" src="thebrothers.jpg" alt="Siblings" loading="lazy"><div class="card-meta"><span>Brothers & Sisters</span><span>Cover</span></div></div>
-        <div class="media-card" onclick="openLightbox('jesenia2.jpg')"><img class="card-thumb" src="jesenia2.jpg" alt="Jesenia" loading="lazy"><div class="card-meta"><span>Jesenia</span><span>02</span></div></div>
-        <div class="media-card" onclick="openLightbox('jesenia3.jpg')"><img class="card-thumb" src="jesenia3.jpg" alt="Jesenia" loading="lazy"><div class="card-meta"><span>Jesenia</span><span>03</span></div></div>
-        <div class="media-card" onclick="openLightbox('jesenia4.jpg')"><img class="card-thumb" src="jesenia4.jpg" alt="Jesenia" loading="lazy"><div class="card-meta"><span>Jesenia</span><span>04</span></div></div>
-        <div class="media-card" onclick="openLightbox('jesenia5.jpg')"><img class="card-thumb" src="jesenia5.jpg" alt="Jesenia" loading="lazy"><div class="card-meta"><span>Jesenia</span><span>05</span></div></div>
-        <div class="media-card" onclick="openLightbox('jesenia6.jpg')"><img class="card-thumb" src="jesenia6.jpg" alt="Jesenia" loading="lazy"><div class="card-meta"><span>Jesenia</span><span>06</span></div></div>
-        <div class="media-card" onclick="openLightbox('jesenia7.jpg')"><img class="card-thumb" src="jesenia7.jpg" alt="Jesenia" loading="lazy"><div class="card-meta"><span>Jesenia</span><span>07</span></div></div>
-        <div class="media-card" onclick="openLightbox('lesly.jpg')"><img class="card-thumb" src="lesly.jpg" alt="Lesly" loading="lazy"><div class="card-meta"><span>Lesly</span><span>01</span></div></div>
-        <div class="media-card" onclick="openLightbox('lesly2.jpg')"><img class="card-thumb" src="lesly2.jpg" alt="Lesly" loading="lazy"><div class="card-meta"><span>Lesly</span><span>02</span></div></div>
-        <div class="media-card" onclick="openLightbox('lesly3.jpg')"><img class="card-thumb" src="lesly3.jpg" alt="Lesly" loading="lazy"><div class="card-meta"><span>Lesly</span><span>03</span></div></div>
-        <div class="media-card" onclick="openLightbox('lesly4.jpg')"><img class="card-thumb" src="lesly4.jpg" alt="Lesly" loading="lazy"><div class="card-meta"><span>Lesly</span><span>04</span></div></div>
-        <div class="media-card" onclick="openLightbox('lesly5.jpg')"><img class="card-thumb" src="lesly5.jpg" alt="Lesly" loading="lazy"><div class="card-meta"><span>Lesly</span><span>05</span></div></div>
-        <div class="media-card" onclick="openLightbox('roniel1.jpg')"><img class="card-thumb" src="roniel1.jpg" alt="Roniel" loading="lazy"><div class="card-meta"><span>Roniel</span><span>01</span></div></div>
-        <div class="media-card" onclick="openLightbox('roniel2.jpg')"><img class="card-thumb" src="roniel2.jpg" alt="Roniel" loading="lazy"><div class="card-meta"><span>Roniel</span><span>02</span></div></div>
-        <div class="media-card" onclick="openLightbox('roniel3.jpg')"><img class="card-thumb" src="roniel3.jpg" alt="Roniel" loading="lazy"><div class="card-meta"><span>Roniel</span><span>03</span></div></div>
-        <div class="media-card" onclick="openLightbox('roniel4.jpg')"><img class="card-thumb" src="roniel4.jpg" alt="Roniel" loading="lazy"><div class="card-meta"><span>Roniel</span><span>04</span></div></div>
-        <div class="media-card" onclick="openLightbox('roniel5.jpg')"><img class="card-thumb" src="roniel5.jpg" alt="Roniel" loading="lazy"><div class="card-meta"><span>Roniel</span><span>05</span></div></div>
-        <div class="media-card" onclick="openLightbox('roniel6.jpg')"><img class="card-thumb" src="roniel6.jpg" alt="Roniel" loading="lazy"><div class="card-meta"><span>Roniel</span><span>06</span></div></div>
-        <div class="media-card" onclick="openLightbox('roniel7.jpg')"><img class="card-thumb" src="roniel7.jpg" alt="Roniel" loading="lazy"><div class="card-meta"><span>Roniel</span><span>07</span></div></div>
-      </div>
-    </section>
+        function showCurrentImage() {
+            if (!activeGalleryList.length) return;
+            const item = activeGalleryList[activeGalleryIndex];
+            const imgEl = document.getElementById('lightboxImg');
+            const capEl = document.getElementById('lightboxCaption');
+            imgEl.src = item.Path;
+            capEl.textContent = `${item.Title} (${activeGalleryIndex + 1} of ${activeGalleryList.length})`;
+        }
 
-    <!-- 6. Parents & Legacy -->
-    <section id="parents" class="album-section">
-      <div class="album-header">
-        <div class="album-title">
-          <h2>Parents & Lifelong Legacy</h2>
-          <p>Honoring our fathers and mothers with gratitude</p>
-        </div>
-        <div class="carousel-controls">
-          <button class="btn-ctrl" onclick="scrollCarousel('carousel-parents', -320)" aria-label="Previous">&#8592;</button>
-          <button class="btn-ctrl" onclick="scrollCarousel('carousel-parents', 320)" aria-label="Next">&#8594;</button>
-        </div>
-      </div>
+        function nextLightboxImage(e) {
+            if (e) e.stopPropagation();
+            if (!activeGalleryList.length) return;
+            activeGalleryIndex = (activeGalleryIndex + 1) % activeGalleryList.length;
+            showCurrentImage();
+        }
 
-      <div class="carousel-viewport" id="carousel-parents">
-        <div class="media-card video-card">
-          <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/k-fCSQlG_UA" title="I really love my Family" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          </div>
-          <div class="card-meta"><span>I Really Love My Family</span><span>Tribute</span></div>
-        </div>
-        <div class="media-card" onclick="openLightbox('mymother2.jpg')"><img class="card-thumb" src="mymother2.jpg" alt="Mother" loading="lazy"><div class="card-meta"><span>Beloved Mother</span><span>02</span></div></div>
-        <div class="media-card" onclick="openLightbox('mymother.jpg')"><img class="card-thumb" src="mymother.jpg" alt="Mother" loading="lazy"><div class="card-meta"><span>Beloved Mother</span><span>01</span></div></div>
-        <div class="media-card" onclick="openLightbox('mymother3.jpg')"><img class="card-thumb" src="mymother3.jpg" alt="Mother" loading="lazy"><div class="card-meta"><span>Beloved Mother</span><span>03</span></div></div>
-        <div class="media-card" onclick="openLightbox('myfather.jpg')"><img class="card-thumb" src="myfather.jpg" alt="Father" loading="lazy"><div class="card-meta"><span>Beloved Father</span><span>01</span></div></div>
-        <div class="media-card" onclick="openLightbox('myfather2.jpg')"><img class="card-thumb" src="myfather2.jpg" alt="Father" loading="lazy"><div class="card-meta"><span>Beloved Father</span><span>02</span></div></div>
-        <div class="media-card" onclick="openLightbox('myfathers2.jpg')"><img class="card-thumb" src="myfathers2.jpg" alt="Parents" loading="lazy"><div class="card-meta"><span>Parents</span><span>Collection 02</span></div></div>
-        <div class="media-card" onclick="openLightbox('myfathers3.jpg')"><img class="card-thumb" src="myfathers3.jpg" alt="Parents" loading="lazy"><div class="card-meta"><span>Parents</span><span>Collection 03</span></div></div>
-      </div>
-    </section>
+        function prevLightboxImage(e) {
+            if (e) e.stopPropagation();
+            if (!activeGalleryList.length) return;
+            activeGalleryIndex = (activeGalleryIndex - 1 + activeGalleryList.length) % activeGalleryList.length;
+            showCurrentImage();
+        }
 
-  </main>
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
 
-  <!-- Interactive Lightbox Modal -->
-  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-    <button class="lightbox-close" aria-label="Close Lightbox">&times;</button>
-    <img id="lightbox-img" class="lightbox-content" src="" alt="Enlarged view">
-  </div>
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('lightbox').classList.contains('active')) {
+                if (e.key === 'ArrowRight') nextLightboxImage();
+                if (e.key === 'ArrowLeft') prevLightboxImage();
+                if (e.key === 'Escape') closeLightbox();
+            }
+        });
 
-  <footer>
-    <p>&copy; The Siu Family Vault &bull; Dedicated to our memories and loved ones.</p>
-  </footer>
+        function initVault() {
+            // Render Videos
+            const rowVideos = document.getElementById('row-videos');
+            const videoCatalogRow = document.getElementById('video-catalog-row');
+            vaultData.Videos.forEach(v => {
+                rowVideos.appendChild(createMediaTile(v, true));
+                videoCatalogRow.appendChild(createMediaTile(v, true));
+            });
 
-  <!-- Vanilla Scripts -->
-  <script>
-    // Smooth Carousel Scroll Controls
-    function scrollCarousel(id, amount) {
-      const container = document.getElementById(id);
-      if (container) {
-        container.scrollBy({ left: amount, behavior: 'smooth' });
-      }
-    }
+            // Helper to populate category rows
+            const populateCategory = (key, dashRowId, fullRowId) => {
+                const dashRow = document.getElementById(dashRowId);
+                const fullRow = document.getElementById(fullRowId);
+                const items = vaultData[key];
+                
+                items.forEach((item, idx) => {
+                    dashRow.appendChild(createMediaTile(item, false, () => openAlbumGallery(items, idx)));
+                    fullRow.appendChild(createMediaTile(item, false, () => openAlbumGallery(items, idx)));
+                });
+            };
 
-    // Modal Lightbox Functionality
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
+            populateCategory('Weddings', 'row-weddings', 'weddings-full-row');
+            populateCategory('Honduras', 'row-honduras', 'honduras-full-row');
+            populateCategory('Miami', 'row-miami', 'miami-full-row');
+            populateCategory('Siblings', 'row-siblings', 'siblings-full-row');
+            populateCategory('Parents', 'row-parents', 'parents-full-row');
+        }
 
-    function openLightbox(src) {
-      lightboxImg.src = src;
-      lightbox.classList.add('active');
-    }
-
-    function closeLightbox() {
-      lightbox.classList.remove('active');
-      lightboxImg.src = '';
-    }
-
-    // Escape Key Listener
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-        closeLightbox();
-      }
-    });
-  </script>
+        window.addEventListener('DOMContentLoaded', initVault);
+    </script>
 </body>
 </html>
