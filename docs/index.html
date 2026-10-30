@@ -114,7 +114,7 @@
             color: var(--text-primary);
         }
         .row-header span {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--accent-glow);
             font-weight: 600;
             cursor: pointer;
@@ -214,16 +214,29 @@
             background: var(--accent-glow);
         }
 
-        .media-info {
-            padding: 10px 12px;
+        /* Album Folder Card Badge Styling */
+        .album-card-overlay {
+            position: absolute;
+            bottom: 0;
+            inset-inline: 0;
+            background: linear-gradient(180deg, transparent, rgba(15, 23, 42, 0.95));
+            padding: 12px 10px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
-        .media-info h4 {
+        .album-card-overlay h4 {
             font-size: 13px;
             font-weight: 600;
+            color: #fff;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            color: var(--text-primary);
+        }
+        .album-card-overlay span {
+            font-size: 11px;
+            color: var(--accent-glow);
+            font-weight: 500;
         }
 
         /* Video Showcase */
@@ -238,7 +251,7 @@
         }
         .video-iframe-wrapper {
             position: relative;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            padding-top: 56.25%;
             width: 100%;
             background: #000;
         }
@@ -357,7 +370,7 @@
     </header>
 
     <main>
-        <!-- BROWSE ALL / NETFLIX DASHBOARD -->
+        <!-- BROWSE ALL / FOLDER DASHBOARD -->
         <section id="section-all" class="portal-section active">
             <div class="row-header">
                 <h3>🎬 Featured Family Films</h3>
@@ -367,31 +380,31 @@
 
             <div class="row-header">
                 <h3>💍 Weddings & Love Forever</h3>
-                <span onclick="switchSection('weddings')">See All &rarr;</span>
+                <span onclick="switchSection('weddings')">View All Folders &rarr;</span>
             </div>
             <div id="row-weddings" class="netflix-row"></div>
 
             <div class="row-header">
                 <h3>🇭🇳 San Pedro Sula & Honduras Family</h3>
-                <span onclick="switchSection('honduras')">See All &rarr;</span>
+                <span onclick="switchSection('honduras')">View All Folders &rarr;</span>
             </div>
             <div id="row-honduras" class="netflix-row"></div>
 
             <div class="row-header">
                 <h3>🌴 Miami Family & The Kids</h3>
-                <span onclick="switchSection('miami')">See All &rarr;</span>
+                <span onclick="switchSection('miami')">View All Folders &rarr;</span>
             </div>
             <div id="row-miami" class="netflix-row"></div>
 
             <div class="row-header">
                 <h3>👥 Brothers & Sisters</h3>
-                <span onclick="switchSection('siblings')">See All &rarr;</span>
+                <span onclick="switchSection('siblings')">View All Folders &rarr;</span>
             </div>
             <div id="row-siblings" class="netflix-row"></div>
 
             <div class="row-header">
                 <h3>❤️ Parents & Legacy</h3>
-                <span onclick="switchSection('parents')">See All &rarr;</span>
+                <span onclick="switchSection('parents')">View All Folders &rarr;</span>
             </div>
             <div id="row-parents" class="netflix-row"></div>
         </section>
@@ -417,8 +430,8 @@
         <!-- WEDDINGS & LOVE SECTION -->
         <section id="section-weddings" class="portal-section">
             <div class="row-header">
-                <h3>💍 Weddings & Love Forever</h3>
-                <span onclick="switchSection('all')">&larr; Back to Dashboard</span>
+                <h3 id="weddings-section-title">💍 Weddings & Love Forever</h3>
+                <span id="weddings-back-btn" style="display:none;" onclick="renderCategoryAlbums('Weddings')">&larr; Back to Albums</span>
             </div>
             <div id="weddings-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
         </section>
@@ -426,8 +439,8 @@
         <!-- HONDURAS SECTION -->
         <section id="section-honduras" class="portal-section">
             <div class="row-header">
-                <h3>🇭🇳 Family in Honduras</h3>
-                <span onclick="switchSection('all')">&larr; Back to Dashboard</span>
+                <h3 id="honduras-section-title">🇭🇳 Family in Honduras</h3>
+                <span id="honduras-back-btn" style="display:none;" onclick="renderCategoryAlbums('Honduras')">&larr; Back to Albums</span>
             </div>
             <div id="honduras-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
         </section>
@@ -435,8 +448,8 @@
         <!-- MIAMI & KIDS SECTION -->
         <section id="section-miami" class="portal-section">
             <div class="row-header">
-                <h3>🌴 Miami Family & The Kids</h3>
-                <span onclick="switchSection('all')">&larr; Back to Dashboard</span>
+                <h3 id="miami-section-title">🌴 Miami Family & The Kids</h3>
+                <span id="miami-back-btn" style="display:none;" onclick="renderCategoryAlbums('Miami')">&larr; Back to Albums</span>
             </div>
             <div id="miami-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
         </section>
@@ -444,8 +457,8 @@
         <!-- SIBLINGS SECTION -->
         <section id="section-siblings" class="portal-section">
             <div class="row-header">
-                <h3>👥 Brothers & Sisters</h3>
-                <span onclick="switchSection('all')">&larr; Back to Dashboard</span>
+                <h3 id="siblings-section-title">👥 Brothers & Sisters</h3>
+                <span id="siblings-back-btn" style="display:none;" onclick="renderCategoryAlbums('Siblings')">&larr; Back to Albums</span>
             </div>
             <div id="siblings-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
         </section>
@@ -453,8 +466,8 @@
         <!-- PARENTS SECTION -->
         <section id="section-parents" class="portal-section">
             <div class="row-header">
-                <h3>❤️ Parents & Lifelong Legacy</h3>
-                <span onclick="switchSection('all')">&larr; Back to Dashboard</span>
+                <h3 id="parents-section-title">❤️ Parents & Lifelong Legacy</h3>
+                <span id="parents-back-btn" style="display:none;" onclick="renderCategoryAlbums('Parents')">&larr; Back to Albums</span>
             </div>
             <div id="parents-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
         </section>
@@ -474,7 +487,8 @@
     </footer>
 
     <script>
-        const vaultData = {
+        // Structured Folder Organization
+        const vaultAlbums = {
             Videos: [
                 { Title: "Declaration of Love", Path: "https://www.youtube.com/embed/2D3rHOzWeEc", Poster: "mywife.jpg", Badge: "VIDEO" },
                 { Title: "Bendecido 2022", Path: "https://www.youtube.com/embed/ZXb8Xzcnmcg", Poster: "family.jpg", Badge: "VIDEO" },
@@ -482,79 +496,133 @@
                 { Title: "I Really Love My Family", Path: "https://www.youtube.com/embed/k-fCSQlG_UA", Poster: "mymother2.jpg", Badge: "VIDEO" }
             ],
             Weddings: [
-                { Title: "My Beautiful Wife (Rosa Iris)", Path: "mywife.jpg", Badge: "BRIDE" },
-                { Title: "Wedding Milestone 01", Path: "boda.jpg", Badge: "BODA" },
-                { Title: "Wedding Milestone 02", Path: "boda2.jpg", Badge: "BODA" },
-                { Title: "Wedding Milestone 03", Path: "boda3.jpg", Badge: "BODA" },
-                { Title: "Wedding Milestone 04", Path: "boda4.jpg", Badge: "BODA" },
-                { Title: "Wedding Milestone 05", Path: "boda5.jpg", Badge: "BODA" },
-                { Title: "Wedding Milestone 06", Path: "boda6.jpg", Badge: "BODA" },
-                { Title: "Wedding Milestone 07", Path: "boda7.jpg", Badge: "BODA" },
-                { Title: "Wedding Milestone 08", Path: "boda8.jpg", Badge: "BODA" },
-                { Title: "Love Forever", Path: "thelove.jpg", Badge: "LOVE" },
-                { Title: "Love 02", Path: "thelove2.jpg", Badge: "LOVE" },
-                { Title: "Love 04", Path: "thelove4.jpg", Badge: "LOVE" },
-                { Title: "Love 05", Path: "thelove5.jpg", Badge: "LOVE" },
-                { Title: "Love 06", Path: "thelove6.jpg", Badge: "LOVE" },
-                { Title: "Love 07", Path: "thelove7.jpg", Badge: "LOVE" },
-                { Title: "Love 08", Path: "thelove8.jpg", Badge: "LOVE" },
-                { Title: "Animated Celebration", Path: "PPS24_1.gif", Badge: "GIF" },
-                { Title: "Kiss 01", Path: "kiss.jpg", Badge: "KISS" },
-                { Title: "Kiss 02", Path: "kiss2.jpg", Badge: "KISS" },
-                { Title: "Kiss 03", Path: "kiss3.jpg", Badge: "KISS" },
-                { Title: "Kiss 04", Path: "kiss4.jpg", Badge: "KISS" },
-                { Title: "Kiss 05", Path: "kiss5.jpg", Badge: "KISS" }
+                {
+                    albumName: "Wedding Celebration",
+                    cover: "mywife.jpg",
+                    items: [
+                        { Title: "My Beautiful Wife (Rosa Iris)", Path: "mywife.jpg" },
+                        { Title: "Wedding 01", Path: "boda.jpg" },
+                        { Title: "Wedding 02", Path: "boda2.jpg" },
+                        { Title: "Wedding 03", Path: "boda3.jpg" },
+                        { Title: "Wedding 04", Path: "boda4.jpg" },
+                        { Title: "Wedding 05", Path: "boda5.jpg" },
+                        { Title: "Wedding 06", Path: "boda6.jpg" },
+                        { Title: "Wedding 07", Path: "boda7.jpg" },
+                        { Title: "Wedding 08", Path: "boda8.jpg" }
+                    ]
+                },
+                {
+                    albumName: "Love Forever",
+                    cover: "thelove.jpg",
+                    items: [
+                        { Title: "Love Forever", Path: "thelove.jpg" },
+                        { Title: "Love 02", Path: "thelove2.jpg" },
+                        { Title: "Love 04", Path: "thelove4.jpg" },
+                        { Title: "Love 05", Path: "thelove5.jpg" },
+                        { Title: "Love 06", Path: "thelove6.jpg" },
+                        { Title: "Love 07", Path: "thelove7.jpg" },
+                        { Title: "Love 08", Path: "thelove8.jpg" },
+                        { Title: "Celebration Animation", Path: "PPS24_1.gif" },
+                        { Title: "Kiss 01", Path: "kiss.jpg" },
+                        { Title: "Kiss 02", Path: "kiss2.jpg" },
+                        { Title: "Kiss 03", Path: "kiss3.jpg" },
+                        { Title: "Kiss 04", Path: "kiss4.jpg" },
+                        { Title: "Kiss 05", Path: "kiss5.jpg" }
+                    ]
+                }
             ],
             Honduras: [
-                { Title: "San Pedro Sula Family Reunion", Path: "family.jpg", Badge: "ROOTS" },
-                { Title: "David 00", Path: "david0.jpg", Badge: "FAMILY" },
-                { Title: "David 02", Path: "david2.jpg", Badge: "FAMILY" },
-                { Title: "David 04", Path: "david4.jpg", Badge: "FAMILY" },
-                { Title: "David 05", Path: "david5.jpg", Badge: "FAMILY" },
-                { Title: "David 06", Path: "david6.jpg", Badge: "FAMILY" },
-                { Title: "David 07", Path: "david7.jpg", Badge: "FAMILY" },
-                { Title: "David 08", Path: "david8.jpg", Badge: "FAMILY" }
+                {
+                    albumName: "San Pedro Sula Roots",
+                    cover: "family.jpg",
+                    items: [
+                        { Title: "San Pedro Sula Family Reunion", Path: "family.jpg" },
+                        { Title: "David 00", Path: "david0.jpg" },
+                        { Title: "David 02", Path: "david2.jpg" },
+                        { Title: "David 04", Path: "david4.jpg" },
+                        { Title: "David 05", Path: "david5.jpg" },
+                        { Title: "David 06", Path: "david6.jpg" },
+                        { Title: "David 07", Path: "david7.jpg" },
+                        { Title: "David 08", Path: "david8.jpg" }
+                    ]
+                }
             ],
             Miami: [
-                { Title: "Miami Family Cover", Path: "miamifamily.jpg", Badge: "MIAMI" },
-                { Title: "Miami Family 02", Path: "miamifamily2.jpg", Badge: "MIAMI" },
-                { Title: "Miami Family 03", Path: "miamifamily3.jpg", Badge: "MIAMI" },
-                { Title: "Miami Family 04", Path: "miamifamily4.jpg", Badge: "MIAMI" },
-                { Title: "The Little Kids Cover", Path: "thekids.jpg", Badge: "KIDS" },
-                { Title: "The Kids 02", Path: "thekids2.jpg", Badge: "KIDS" },
-                { Title: "The Kids 03", Path: "thekids3.jpg", Badge: "KIDS" },
-                { Title: "The Kids 04", Path: "thekids4.jpg", Badge: "KIDS" },
-                { Title: "The Kids 05", Path: "thekids5.jpg", Badge: "KIDS" }
+                {
+                    albumName: "Family in Miami",
+                    cover: "miamifamily.jpg",
+                    items: [
+                        { Title: "Miami Family Cover", Path: "miamifamily.jpg" },
+                        { Title: "Miami Family 02", Path: "miamifamily2.jpg" },
+                        { Title: "Miami Family 03", Path: "miamifamily3.jpg" },
+                        { Title: "Miami Family 04", Path: "miamifamily4.jpg" }
+                    ]
+                },
+                {
+                    albumName: "The Little Kids",
+                    cover: "thekids.jpg",
+                    items: [
+                        { Title: "The Little Kids Cover", Path: "thekids.jpg" },
+                        { Title: "The Kids 02", Path: "thekids2.jpg" },
+                        { Title: "The Kids 03", Path: "thekids3.jpg" },
+                        { Title: "The Kids 04", Path: "thekids4.jpg" },
+                        { Title: "The Kids 05", Path: "thekids5.jpg" }
+                    ]
+                }
             ],
             Siblings: [
-                { Title: "Brothers & Sisters Cover", Path: "thebrothers.jpg", Badge: "SIBLINGS" },
-                { Title: "Jesenia 02", Path: "jesenia2.jpg", Badge: "JESENIA" },
-                { Title: "Jesenia 03", Path: "jesenia3.jpg", Badge: "JESENIA" },
-                { Title: "Jesenia 04", Path: "jesenia4.jpg", Badge: "JESENIA" },
-                { Title: "Jesenia 05", Path: "jesenia5.jpg", Badge: "JESENIA" },
-                { Title: "Jesenia 06", Path: "jesenia6.jpg", Badge: "JESENIA" },
-                { Title: "Jesenia 07", Path: "jesenia7.jpg", Badge: "JESENIA" },
-                { Title: "Lesly 01", Path: "lesly.jpg", Badge: "LESLY" },
-                { Title: "Lesly 02", Path: "lesly2.jpg", Badge: "LESLY" },
-                { Title: "Lesly 03", Path: "lesly3.jpg", Badge: "LESLY" },
-                { Title: "Lesly 04", Path: "lesly4.jpg", Badge: "LESLY" },
-                { Title: "Lesly 05", Path: "lesly5.jpg", Badge: "LESLY" },
-                { Title: "Roniel 01", Path: "roniel1.jpg", Badge: "RONIEL" },
-                { Title: "Roniel 02", Path: "roniel2.jpg", Badge: "RONIEL" },
-                { Title: "Roniel 03", Path: "roniel3.jpg", Badge: "RONIEL" },
-                { Title: "Roniel 04", Path: "roniel4.jpg", Badge: "RONIEL" },
-                { Title: "Roniel 05", Path: "roniel5.jpg", Badge: "RONIEL" },
-                { Title: "Roniel 06", Path: "roniel6.jpg", Badge: "RONIEL" },
-                { Title: "Roniel 07", Path: "roniel7.jpg", Badge: "RONIEL" }
+                {
+                    albumName: "Jesenia Album",
+                    cover: "thebrothers.jpg",
+                    items: [
+                        { Title: "Brothers & Sisters Cover", Path: "thebrothers.jpg" },
+                        { Title: "Jesenia 02", Path: "jesenia2.jpg" },
+                        { Title: "Jesenia 03", Path: "jesenia3.jpg" },
+                        { Title: "Jesenia 04", Path: "jesenia4.jpg" },
+                        { Title: "Jesenia 05", Path: "jesenia5.jpg" },
+                        { Title: "Jesenia 06", Path: "jesenia6.jpg" },
+                        { Title: "Jesenia 07", Path: "jesenia7.jpg" }
+                    ]
+                },
+                {
+                    albumName: "Lesly Album",
+                    cover: "lesly.jpg",
+                    items: [
+                        { Title: "Lesly 01", Path: "lesly.jpg" },
+                        { Title: "Lesly 02", Path: "lesly2.jpg" },
+                        { Title: "Lesly 03", Path: "lesly3.jpg" },
+                        { Title: "Lesly 04", Path: "lesly4.jpg" },
+                        { Title: "Lesly 05", Path: "lesly5.jpg" }
+                    ]
+                },
+                {
+                    albumName: "Roniel Album",
+                    cover: "roniel1.jpg",
+                    items: [
+                        { Title: "Roniel 01", Path: "roniel1.jpg" },
+                        { Title: "Roniel 02", Path: "roniel2.jpg" },
+                        { Title: "Roniel 03", Path: "roniel3.jpg" },
+                        { Title: "Roniel 04", Path: "roniel4.jpg" },
+                        { Title: "Roniel 05", Path: "roniel5.jpg" },
+                        { Title: "Roniel 06", Path: "roniel6.jpg" },
+                        { Title: "Roniel 07", Path: "roniel7.jpg" }
+                    ]
+                }
             ],
             Parents: [
-                { Title: "Beloved Mother 02", Path: "mymother2.jpg", Badge: "MOTHER" },
-                { Title: "Beloved Mother 01", Path: "mymother.jpg", Badge: "MOTHER" },
-                { Title: "Beloved Mother 03", Path: "mymother3.jpg", Badge: "MOTHER" },
-                { Title: "Beloved Father 01", Path: "myfather.jpg", Badge: "FATHER" },
-                { Title: "Beloved Father 02", Path: "myfather2.jpg", Badge: "FATHER" },
-                { Title: "Parents Collection 02", Path: "myfathers2.jpg", Badge: "PARENTS" },
-                { Title: "Parents Collection 03", Path: "myfathers3.jpg", Badge: "PARENTS" }
+                {
+                    albumName: "Parents & Lifelong Legacy",
+                    cover: "mymother2.jpg",
+                    items: [
+                        { Title: "Beloved Mother 02", Path: "mymother2.jpg" },
+                        { Title: "Beloved Mother 01", Path: "mymother.jpg" },
+                        { Title: "Beloved Mother 03", Path: "mymother3.jpg" },
+                        { Title: "Beloved Father 01", Path: "myfather.jpg" },
+                        { Title: "Beloved Father 02", Path: "myfather2.jpg" },
+                        { Title: "Parents Collection 02", Path: "myfathers2.jpg" },
+                        { Title: "Parents Collection 03", Path: "myfathers3.jpg" }
+                    ]
+                }
             ]
         };
 
@@ -570,45 +638,64 @@
             if (sec) sec.classList.add('active');
             if (btn) btn.classList.add('active');
 
+            // Reset category views back to album cards overview
+            if (secId !== 'all' && secId !== 'videos') {
+                const catKey = secId.charAt(0).toUpperCase() + secId.slice(1);
+                renderCategoryAlbums(catKey);
+            }
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function createMediaTile(item, isVideo, onClickHandler) {
+        // Create an Album Folder Card (Cover + Badge + Count)
+        function createFolderTile(album, onClickHandler) {
             const card = document.createElement('div');
             card.className = 'media-card';
-            
-            let mediaHtml = '';
-            if (isVideo) {
-                mediaHtml = `
-                    <div class="media-poster">
-                        <span class="media-badge">${item.Badge || 'VIDEO'}</span>
-                        <img src="${item.Poster}" alt="${item.Title}" loading="lazy">
-                        <div class="media-play-overlay">
-                            <div class="play-button-icon">▶</div>
-                        </div>
+            card.innerHTML = `
+                <div class="media-poster">
+                    <span class="media-badge">ALBUM</span>
+                    <img src="${album.cover}" alt="${album.albumName}" loading="lazy">
+                    <div class="album-card-overlay">
+                        <h4>📁 ${album.albumName}</h4>
+                        <span>${album.items.length} Photos</span>
                     </div>
-                    <div class="media-info">
-                        <h4>${item.Title}</h4>
-                    </div>
-                `;
-            } else {
-                mediaHtml = `
-                    <div class="media-poster">
-                        <span class="media-badge">${item.Badge || 'PHOTO'}</span>
-                        <img src="${item.Path}" alt="${item.Title}" loading="lazy">
-                    </div>
-                `;
-            }
+                </div>
+            `;
+            card.onclick = onClickHandler;
+            return card;
+        }
 
-            card.innerHTML = mediaHtml;
+        // Create a Single Media Card (No bottom text label)
+        function createPhotoTile(item, onClickHandler) {
+            const card = document.createElement('div');
+            card.className = 'media-card';
+            card.innerHTML = `
+                <div class="media-poster">
+                    <img src="${item.Path}" alt="${item.Title}" loading="lazy">
+                </div>
+            `;
+            card.onclick = onClickHandler;
+            return card;
+        }
 
-            if (onClickHandler) {
-                card.onclick = onClickHandler;
-            } else if (isVideo) {
-                card.onclick = () => playSelectedVideo(item.Path, item.Title);
-            } else {
-                card.onclick = () => openAlbumGallery([item], 0);
-            }
+        // Create Video Card
+        function createVideoTile(video) {
+            const card = document.createElement('div');
+            card.className = 'media-card';
+            card.innerHTML = `
+                <div class="media-poster">
+                    <span class="media-badge">VIDEO</span>
+                    <img src="${video.Poster}" alt="${video.Title}" loading="lazy">
+                    <div class="media-play-overlay">
+                        <div class="play-button-icon">▶</div>
+                    </div>
+                    <div class="album-card-overlay">
+                        <h4>${video.Title}</h4>
+                        <span>YouTube Stream</span>
+                    </div>
+                </div>
+            `;
+            card.onclick = () => playSelectedVideo(video.Path, video.Title);
             return card;
         }
 
@@ -620,6 +707,55 @@
             switchSection('videos');
         }
 
+        // Open an album folder to view all individual photo tiles
+        function openAlbum(categoryKey, albumIndex) {
+            const album = vaultAlbums[categoryKey][albumIndex];
+            const lowerKey = categoryKey.toLowerCase();
+            const container = document.getElementById(lowerKey + '-full-row');
+            const titleEl = document.getElementById(lowerKey + '-section-title');
+            const backBtn = document.getElementById(lowerKey + '-back-btn');
+
+            titleEl.textContent = `📁 ${album.albumName} (${album.items.length} Photos)`;
+            backBtn.style.display = 'inline';
+            container.innerHTML = '';
+
+            album.items.forEach((photo, idx) => {
+                const tile = createPhotoTile(photo, () => openAlbumGallery(album.items, idx));
+                container.appendChild(tile);
+            });
+
+            switchSection(lowerKey);
+        }
+
+        // Render all Album Folders inside a category
+        function renderCategoryAlbums(categoryKey) {
+            const lowerKey = categoryKey.toLowerCase();
+            const container = document.getElementById(lowerKey + '-full-row');
+            const titleEl = document.getElementById(lowerKey + '-section-title');
+            const backBtn = document.getElementById(lowerKey + '-back-btn');
+
+            backBtn.style.display = 'none';
+            container.innerHTML = '';
+
+            const albums = vaultAlbums[categoryKey] || [];
+            
+            // Set standard category title
+            const titles = {
+                Weddings: "💍 Weddings & Love Forever",
+                Honduras: "🇭🇳 Family in Honduras",
+                Miami: "🌴 Miami Family & The Kids",
+                Siblings: "👥 Brothers & Sisters",
+                Parents: "❤️ Parents & Lifelong Legacy"
+            };
+            titleEl.textContent = titles[categoryKey] || categoryKey;
+
+            albums.forEach((album, idx) => {
+                const folderCard = createFolderTile(album, () => openAlbum(categoryKey, idx));
+                container.appendChild(folderCard);
+            });
+        }
+
+        // Lightbox Navigation
         function openAlbumGallery(images, startIndex = 0) {
             if (!images || !images.length) return;
             activeGalleryList = images;
@@ -663,35 +799,50 @@
             }
         });
 
+        // Initialize Vault with Failsafe Execution
         function initVault() {
-            // Render Videos
+            // 1. Featured Videos
             const rowVideos = document.getElementById('row-videos');
             const videoCatalogRow = document.getElementById('video-catalog-row');
-            vaultData.Videos.forEach(v => {
-                rowVideos.appendChild(createMediaTile(v, true));
-                videoCatalogRow.appendChild(createMediaTile(v, true));
+            if (rowVideos) rowVideos.innerHTML = '';
+            if (videoCatalogRow) videoCatalogRow.innerHTML = '';
+
+            vaultAlbums.Videos.forEach(v => {
+                if (rowVideos) rowVideos.appendChild(createVideoTile(v));
+                if (videoCatalogRow) videoCatalogRow.appendChild(createVideoTile(v));
             });
 
-            // Helper to populate category rows
-            const populateCategory = (key, dashRowId, fullRowId) => {
-                const dashRow = document.getElementById(dashRowId);
-                const fullRow = document.getElementById(fullRowId);
-                const items = vaultData[key];
-                
-                items.forEach((item, idx) => {
-                    dashRow.appendChild(createMediaTile(item, false, () => openAlbumGallery(items, idx)));
-                    fullRow.appendChild(createMediaTile(item, false, () => openAlbumGallery(items, idx)));
+            // 2. Dashboard Album Rows
+            const populateDashboardRow = (categoryKey, dashRowId) => {
+                const row = document.getElementById(dashRowId);
+                if (!row) return;
+                row.innerHTML = '';
+                const albums = vaultAlbums[categoryKey] || [];
+                albums.forEach((album, idx) => {
+                    row.appendChild(createFolderTile(album, () => openAlbum(categoryKey, idx)));
                 });
             };
 
-            populateCategory('Weddings', 'row-weddings', 'weddings-full-row');
-            populateCategory('Honduras', 'row-honduras', 'honduras-full-row');
-            populateCategory('Miami', 'row-miami', 'miami-full-row');
-            populateCategory('Siblings', 'row-siblings', 'siblings-full-row');
-            populateCategory('Parents', 'row-parents', 'parents-full-row');
+            populateDashboardRow('Weddings', 'row-weddings');
+            populateDashboardRow('Honduras', 'row-honduras');
+            populateDashboardRow('Miami', 'row-miami');
+            populateDashboardRow('Siblings', 'row-siblings');
+            populateDashboardRow('Parents', 'row-parents');
+
+            // 3. Category full views
+            renderCategoryAlbums('Weddings');
+            renderCategoryAlbums('Honduras');
+            renderCategoryAlbums('Miami');
+            renderCategoryAlbums('Siblings');
+            renderCategoryAlbums('Parents');
         }
 
-        window.addEventListener('DOMContentLoaded', initVault);
+        // Failsafe: Run immediately if DOM is ready, or bind listener
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initVault);
+        } else {
+            initVault();
+        }
     </script>
 </body>
 </html>
