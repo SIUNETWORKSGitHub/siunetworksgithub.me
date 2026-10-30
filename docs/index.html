@@ -143,6 +143,7 @@
             cursor: pointer;
             transition: transform 0.25s ease, box-shadow 0.25s ease;
             position: relative;
+            margin-bottom: 14px;
         }
         @media (max-width: 600px) {
             .media-card { flex: 0 0 170px; }
@@ -214,7 +215,6 @@
             background: var(--accent-glow);
         }
 
-        /* Album Folder Card Badge Styling */
         .album-card-overlay {
             position: absolute;
             bottom: 0;
@@ -239,7 +239,6 @@
             font-weight: 500;
         }
 
-        /* Video Showcase */
         .video-player-container {
             width: 100%;
             background: #000;
@@ -272,7 +271,6 @@
             font-size: 14px;
         }
 
-        /* Lightbox Modal */
         .lightbox-modal {
             display: none;
             position: fixed;
@@ -361,16 +359,16 @@
         <nav class="category-nav">
             <button id="btn-all" class="nav-pill active" onclick="switchSection('all')">Browse All</button>
             <button id="btn-videos" class="nav-pill" onclick="switchSection('videos')">Videos & Films</button>
-            <button id="btn-weddings" class="nav-pill" onclick="switchSection('weddings')">Weddings & Love</button>
-            <button id="btn-honduras" class="nav-pill" onclick="switchSection('honduras')">Honduras Roots</button>
-            <button id="btn-miami" class="nav-pill" onclick="switchSection('miami')">Miami & Kids</button>
-            <button id="btn-siblings" class="nav-pill" onclick="switchSection('siblings')">Brothers & Sisters</button>
-            <button id="btn-parents" class="nav-pill" onclick="switchSection('parents')">Parents & Legacy</button>
+            <button id="btn-weddings" class="nav-pill" onclick="switchSection('weddings'); renderCategoryAlbums('Weddings');">Weddings & Love</button>
+            <button id="btn-honduras" class="nav-pill" onclick="switchSection('honduras'); renderCategoryAlbums('Honduras');">Honduras Roots</button>
+            <button id="btn-miami" class="nav-pill" onclick="switchSection('miami'); renderCategoryAlbums('Miami');">Miami & Kids</button>
+            <button id="btn-siblings" class="nav-pill" onclick="switchSection('siblings'); renderCategoryAlbums('Siblings');">Brothers & Sisters</button>
+            <button id="btn-parents" class="nav-pill" onclick="switchSection('parents'); renderCategoryAlbums('Parents');">Parents & Legacy</button>
         </nav>
     </header>
 
     <main>
-        <!-- BROWSE ALL / FOLDER DASHBOARD -->
+        <!-- BROWSE ALL -->
         <section id="section-all" class="portal-section active">
             <div class="row-header">
                 <h3>🎬 Featured Family Films</h3>
@@ -380,31 +378,31 @@
 
             <div class="row-header">
                 <h3>💍 Weddings & Love Forever</h3>
-                <span onclick="switchSection('weddings')">View All Folders &rarr;</span>
+                <span onclick="switchSection('weddings'); renderCategoryAlbums('Weddings');">View All Folders &rarr;</span>
             </div>
             <div id="row-weddings" class="netflix-row"></div>
 
             <div class="row-header">
                 <h3>🇭🇳 San Pedro Sula & Honduras Family</h3>
-                <span onclick="switchSection('honduras')">View All Folders &rarr;</span>
+                <span onclick="switchSection('honduras'); renderCategoryAlbums('Honduras');">View All Folders &rarr;</span>
             </div>
             <div id="row-honduras" class="netflix-row"></div>
 
             <div class="row-header">
                 <h3>🌴 Miami Family & The Kids</h3>
-                <span onclick="switchSection('miami')">View All Folders &rarr;</span>
+                <span onclick="switchSection('miami'); renderCategoryAlbums('Miami');">View All Folders &rarr;</span>
             </div>
             <div id="row-miami" class="netflix-row"></div>
 
             <div class="row-header">
                 <h3>👥 Brothers & Sisters</h3>
-                <span onclick="switchSection('siblings')">View All Folders &rarr;</span>
+                <span onclick="switchSection('siblings'); renderCategoryAlbums('Siblings');">View All Folders &rarr;</span>
             </div>
             <div id="row-siblings" class="netflix-row"></div>
 
             <div class="row-header">
                 <h3>❤️ Parents & Legacy</h3>
-                <span onclick="switchSection('parents')">View All Folders &rarr;</span>
+                <span onclick="switchSection('parents'); renderCategoryAlbums('Parents');">View All Folders &rarr;</span>
             </div>
             <div id="row-parents" class="netflix-row"></div>
         </section>
@@ -473,7 +471,7 @@
         </section>
     </main>
 
-    <!-- FULLSCREEN LIGHTBOX WITH GALLERY NAVIGATION -->
+    <!-- FULLSCREEN LIGHTBOX -->
     <div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
         <span class="lightbox-close">&times;</span>
         <div class="lightbox-nav-btn lightbox-prev" onclick="prevLightboxImage(event)">&#10094;</div>
@@ -487,7 +485,6 @@
     </footer>
 
     <script>
-        // Structured Folder Organization
         const vaultAlbums = {
             Videos: [
                 { Title: "Declaration of Love", Path: "https://www.youtube.com/embed/2D3rHOzWeEc", Poster: "mywife.jpg", Badge: "VIDEO" },
@@ -501,14 +498,14 @@
                     cover: "mywife.jpg",
                     items: [
                         { Title: "My Beautiful Wife (Rosa Iris)", Path: "mywife.jpg" },
-                        { Title: "Wedding 01", Path: "boda.jpg" },
-                        { Title: "Wedding 02", Path: "boda2.jpg" },
-                        { Title: "Wedding 03", Path: "boda3.jpg" },
-                        { Title: "Wedding 04", Path: "boda4.jpg" },
-                        { Title: "Wedding 05", Path: "boda5.jpg" },
-                        { Title: "Wedding 06", Path: "boda6.jpg" },
-                        { Title: "Wedding 07", Path: "boda7.jpg" },
-                        { Title: "Wedding 08", Path: "boda8.jpg" }
+                        { Title: "Wedding Milestone 01", Path: "boda.jpg" },
+                        { Title: "Wedding Milestone 02", Path: "boda2.jpg" },
+                        { Title: "Wedding Milestone 03", Path: "boda3.jpg" },
+                        { Title: "Wedding Milestone 04", Path: "boda4.jpg" },
+                        { Title: "Wedding Milestone 05", Path: "boda5.jpg" },
+                        { Title: "Wedding Milestone 06", Path: "boda6.jpg" },
+                        { Title: "Wedding Milestone 07", Path: "boda7.jpg" },
+                        { Title: "Wedding Milestone 08", Path: "boda8.jpg" }
                     ]
                 },
                 {
@@ -638,16 +635,9 @@
             if (sec) sec.classList.add('active');
             if (btn) btn.classList.add('active');
 
-            // Reset category views back to album cards overview
-            if (secId !== 'all' && secId !== 'videos') {
-                const catKey = secId.charAt(0).toUpperCase() + secId.slice(1);
-                renderCategoryAlbums(catKey);
-            }
-
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Create an Album Folder Card (Cover + Badge + Count)
         function createFolderTile(album, onClickHandler) {
             const card = document.createElement('div');
             card.className = 'media-card';
@@ -665,12 +655,12 @@
             return card;
         }
 
-        // Create a Single Media Card (No bottom text label)
         function createPhotoTile(item, onClickHandler) {
             const card = document.createElement('div');
             card.className = 'media-card';
             card.innerHTML = `
                 <div class="media-poster">
+                    <span class="media-badge">PHOTO</span>
                     <img src="${item.Path}" alt="${item.Title}" loading="lazy">
                 </div>
             `;
@@ -678,7 +668,6 @@
             return card;
         }
 
-        // Create Video Card
         function createVideoTile(video) {
             const card = document.createElement('div');
             card.className = 'media-card';
@@ -707,10 +696,14 @@
             switchSection('videos');
         }
 
-        // Open an album folder to view all individual photo tiles
+        // Open album and show all photos inside
         function openAlbum(categoryKey, albumIndex) {
             const album = vaultAlbums[categoryKey][albumIndex];
             const lowerKey = categoryKey.toLowerCase();
+            
+            // Activate the section first
+            switchSection(lowerKey);
+
             const container = document.getElementById(lowerKey + '-full-row');
             const titleEl = document.getElementById(lowerKey + '-section-title');
             const backBtn = document.getElementById(lowerKey + '-back-btn');
@@ -723,11 +716,9 @@
                 const tile = createPhotoTile(photo, () => openAlbumGallery(album.items, idx));
                 container.appendChild(tile);
             });
-
-            switchSection(lowerKey);
         }
 
-        // Render all Album Folders inside a category
+        // Render folder cards overview for a category
         function renderCategoryAlbums(categoryKey) {
             const lowerKey = categoryKey.toLowerCase();
             const container = document.getElementById(lowerKey + '-full-row');
@@ -739,7 +730,6 @@
 
             const albums = vaultAlbums[categoryKey] || [];
             
-            // Set standard category title
             const titles = {
                 Weddings: "💍 Weddings & Love Forever",
                 Honduras: "🇭🇳 Family in Honduras",
@@ -755,7 +745,7 @@
             });
         }
 
-        // Lightbox Navigation
+        // Lightbox navigation
         function openAlbumGallery(images, startIndex = 0) {
             if (!images || !images.length) return;
             activeGalleryList = images;
@@ -799,9 +789,8 @@
             }
         });
 
-        // Initialize Vault with Failsafe Execution
         function initVault() {
-            // 1. Featured Videos
+            // Render Videos
             const rowVideos = document.getElementById('row-videos');
             const videoCatalogRow = document.getElementById('video-catalog-row');
             if (rowVideos) rowVideos.innerHTML = '';
@@ -812,7 +801,7 @@
                 if (videoCatalogRow) videoCatalogRow.appendChild(createVideoTile(v));
             });
 
-            // 2. Dashboard Album Rows
+            // Populate dashboard rows with album cards
             const populateDashboardRow = (categoryKey, dashRowId) => {
                 const row = document.getElementById(dashRowId);
                 if (!row) return;
@@ -829,7 +818,7 @@
             populateDashboardRow('Siblings', 'row-siblings');
             populateDashboardRow('Parents', 'row-parents');
 
-            // 3. Category full views
+            // Populate category views
             renderCategoryAlbums('Weddings');
             renderCategoryAlbums('Honduras');
             renderCategoryAlbums('Miami');
@@ -837,7 +826,6 @@
             renderCategoryAlbums('Parents');
         }
 
-        // Failsafe: Run immediately if DOM is ready, or bind listener
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initVault);
         } else {
