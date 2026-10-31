@@ -555,11 +555,11 @@
                 <div class="form-group">
                     <label for="upload-category">Vault Category</label>
                     <select id="upload-category">
+                        <option value="Parents">Parents & Legacy</option>
                         <option value="Weddings">Weddings & Love Forever</option>
                         <option value="Honduras">San Pedro Sula & Honduras Family</option>
                         <option value="Miami">Miami Family & The Kids</option>
                         <option value="Siblings">Brothers & Sisters</option>
-                        <option value="Parents">Parents & Legacy</option>
                     </select>
                 </div>
 
@@ -666,7 +666,6 @@
     </footer>
 
     <script>
-        // Production Cloudflare Worker Endpoint
         const WORKER_UPLOAD_URL = "https://vault-uploader.robertoj-siulemus001.workers.dev";
         const R2_BASE_URL = "https://fotos.siunetworksgithub.me";
 
@@ -862,8 +861,6 @@
             progressBox.style.display = 'block';
             progressBar.style.width = '0%';
 
-            const uploadedItems = [];
-
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const pct = Math.round((i / files.length) * 100);
@@ -875,6 +872,7 @@
                         method: "PUT",
                         headers: {
                             "Content-Type": file.type || "application/octet-stream",
+                            "X-Category-Name": category,
                             "X-Folder-Name": albumName,
                             "X-File-Name": file.name
                         },
@@ -885,12 +883,6 @@
                         const errData = await response.json().catch(() => ({}));
                         throw new Error(errData.error || `HTTP error ${response.status}`);
                     }
-
-                    const result = await response.json();
-                    uploadedItems.push({
-                        Title: file.name.replace(/\.[^/.]+$/, ""),
-                        Path: result.url
-                    });
                 } catch (err) {
                     console.error("Upload failed for:", file.name, err);
                     alert(`Failed to upload ${file.name}: ${err.message}`);
@@ -903,34 +895,18 @@
             progressBar.style.width = '100%';
             progressLabel.textContent = `Successfully uploaded ${files.length} items to ${albumName}!`;
 
-            // Append album dynamically to local state
-            if (!vaultAlbums[category]) vaultAlbums[category] = [];
-            const existingAlbum = vaultAlbums[category].find(a => a.albumName.toLowerCase() === albumName.toLowerCase());
-
-            if (existingAlbum) {
-                existingAlbum.items.push(...uploadedItems);
-            } else {
-                vaultAlbums[category].push({
-                    albumName: albumName,
-                    cover: uploadedItems[0].Path,
-                    items: uploadedItems
-                });
-            }
-
-            // Refresh dashboards and categories
-            initVault();
-
-            // Reset upload form
             albumInput.value = '';
             fileInput.value = '';
             document.getElementById('file-summary').textContent = '';
             btnUpload.disabled = false;
 
-            // Automatically navigate to view the album
+            // Re-fetch all live R2 albums so the view updates immediately
+            await initVault();
+
             setTimeout(() => {
                 switchSection(category.toLowerCase());
                 renderCategoryAlbums(category);
-            }, 1200);
+            }, 1000);
         }
 
         function createFolderTile(album, onClickHandler) {
@@ -1081,7 +1057,33 @@
             }
         });
 
-        function initVault() {
+        async function initVault() {
+            // Fetch dynamically loaded albums from Cloudflare R2 via our Worker
+            try {
+                const res = await fetch(`${WORKER_UPLOAD_URL}/api/albums`);
+                if (res.ok) {
+                    const liveAlbums = await res.json();
+                    for (let [cat, albumMap] of Object.entries(liveAlbums)) {
+                        // Fallback: unassigned or General uploads display under Parents & Legacy
+                        if (cat === "General") cat = "Parents";
+
+                        if (!vaultAlbums[cat]) vaultAlbums[cat] = [];
+                        for (const albumData of Object.values(albumMap)) {
+                            const existingIdx = vaultAlbums[cat].findIndex(
+                                a => a.albumName.toLowerCase() === albumData.albumName.toLowerCase()
+                            );
+                            if (existingIdx >= 0) {
+                                vaultAlbums[cat][existingIdx] = albumData;
+                            } else {
+                                vaultAlbums[cat].unshift(albumData);
+                            }
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn("Could not load dynamic albums from R2, relying on base catalog:", err);
+            }
+
             const rowVideos = document.getElementById('row-videos');
             const videoCatalogRow = document.getElementById('video-catalog-row');
             if (rowVideos) rowVideos.innerHTML = '';
