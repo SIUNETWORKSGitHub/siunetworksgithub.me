@@ -89,6 +89,15 @@
             border-color: var(--accent-glow);
             box-shadow: 0 0 15px rgba(13, 148, 136, 0.4);
         }
+        .nav-pill.upload-pill {
+            background: rgba(20, 184, 166, 0.15);
+            border-color: var(--accent-glow);
+            color: #5eead4;
+        }
+        .nav-pill.upload-pill:hover {
+            background: var(--accent-teal);
+            color: #fff;
+        }
 
         main {
             flex: 1;
@@ -239,6 +248,133 @@
             font-weight: 500;
         }
 
+        /* Upload Album Section Styling */
+        .vault-upload-wrapper {
+            max-width: 680px;
+            margin: 20px auto 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        .vault-upload-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .vault-upload-header h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        .vault-upload-header p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .form-group {
+            margin-bottom: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .form-group input[type="text"],
+        .form-group select {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-primary);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input[type="text"]:focus,
+        .form-group select:focus {
+            border-color: var(--accent-glow);
+        }
+        .file-dropzone {
+            border: 2px dashed rgba(255, 255, 255, 0.18);
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            background: #0f172a;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .file-dropzone:hover {
+            border-color: var(--accent-glow);
+            background: rgba(13, 148, 136, 0.05);
+        }
+        .file-dropzone input[type="file"] {
+            display: none;
+        }
+        .file-dropzone-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: block;
+        }
+        .file-dropzone-label strong {
+            color: var(--accent-glow);
+        }
+        .file-summary {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #5eead4;
+        }
+        .btn-vault-upload {
+            width: 100%;
+            background: var(--accent-teal);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 10px;
+        }
+        .btn-vault-upload:hover {
+            background: var(--accent-glow);
+        }
+        .btn-vault-upload:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .upload-progress-container {
+            margin-top: 20px;
+            display: none;
+        }
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background: #0f172a;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-teal), #38bdf8);
+            transition: width 0.2s ease;
+        }
+        .upload-status-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: block;
+            text-align: center;
+        }
+
         .video-player-container {
             width: 100%;
             background: #000;
@@ -364,6 +500,7 @@
             <button id="btn-miami" class="nav-pill" onclick="switchSection('miami'); renderCategoryAlbums('Miami');">Miami & Kids</button>
             <button id="btn-siblings" class="nav-pill" onclick="switchSection('siblings'); renderCategoryAlbums('Siblings');">Brothers & Sisters</button>
             <button id="btn-parents" class="nav-pill" onclick="switchSection('parents'); renderCategoryAlbums('Parents');">Parents & Legacy</button>
+            <button id="btn-upload" class="nav-pill upload-pill" onclick="switchSection('upload')">➕ Upload Album</button>
         </nav>
     </header>
 
@@ -405,6 +542,50 @@
                 <span onclick="switchSection('parents'); renderCategoryAlbums('Parents');">View All Folders &rarr;</span>
             </div>
             <div id="row-parents" class="netflix-row"></div>
+        </section>
+
+        <!-- UPLOAD SECTION -->
+        <section id="section-upload" class="portal-section">
+            <div class="vault-upload-wrapper">
+                <div class="vault-upload-header">
+                    <h2>Upload your album here</h2>
+                    <p>Add new memories, milestones, and family photo collections directly into the secure cloud vault.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="upload-category">Vault Category</label>
+                    <select id="upload-category">
+                        <option value="Weddings">Weddings & Love Forever</option>
+                        <option value="Honduras">San Pedro Sula & Honduras Family</option>
+                        <option value="Miami">Miami Family & The Kids</option>
+                        <option value="Siblings">Brothers & Sisters</option>
+                        <option value="Parents">Parents & Legacy</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="upload-album-name">Folder / Album Name</label>
+                    <input type="text" id="upload-album-name" placeholder="e.g. Vacation 2026, Birthday Celebration..." required />
+                </div>
+
+                <div class="form-group">
+                    <label>Choose Photos or Videos</label>
+                    <div class="file-dropzone" onclick="document.getElementById('upload-files').click()">
+                        <input type="file" id="upload-files" multiple accept="image/*,video/*" />
+                        <span class="file-dropzone-label">📁 Click to select files or <strong>drag & drop here</strong></span>
+                        <div id="file-summary" class="file-summary"></div>
+                    </div>
+                </div>
+
+                <button id="btn-submit-upload" class="btn-vault-upload" type="button" onclick="handleVaultUpload()">Upload to Vault</button>
+
+                <div id="upload-progress-box" class="upload-progress-container">
+                    <div class="progress-track">
+                        <div id="upload-progress-bar" class="progress-fill"></div>
+                    </div>
+                    <span id="upload-progress-label" class="upload-status-text">Uploading files...</span>
+                </div>
+            </div>
         </section>
 
         <!-- VIDEOS SECTION -->
@@ -485,6 +666,10 @@
     </footer>
 
     <script>
+        // Production Cloudflare Worker Endpoint
+        const WORKER_UPLOAD_URL = "https://vault-uploader.robertoj-siulemus001.workers.dev";
+        const R2_BASE_URL = "https://fotos.siunetworksgithub.me";
+
         const vaultAlbums = {
             Videos: [
                 { Title: "Declaration of Love", Path: "https://www.youtube.com/embed/2D3rHOzWeEc", Poster: "mywife.jpg", Badge: "VIDEO" },
@@ -638,6 +823,116 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // File selection label handler
+        document.getElementById('upload-files').addEventListener('change', function(e) {
+            const summary = document.getElementById('file-summary');
+            if (this.files && this.files.length > 0) {
+                summary.textContent = `Selected: ${this.files.length} file(s)`;
+            } else {
+                summary.textContent = '';
+            }
+        });
+
+        // Upload functionality connecting to Cloudflare Worker
+        async function handleVaultUpload() {
+            const categorySelect = document.getElementById('upload-category');
+            const albumInput = document.getElementById('upload-album-name');
+            const fileInput = document.getElementById('upload-files');
+            const btnUpload = document.getElementById('btn-submit-upload');
+            const progressBox = document.getElementById('upload-progress-box');
+            const progressBar = document.getElementById('upload-progress-bar');
+            const progressLabel = document.getElementById('upload-progress-label');
+
+            const category = categorySelect.value;
+            const albumName = albumInput.value.trim();
+            const files = Array.from(fileInput.files);
+
+            if (!albumName) {
+                alert("Please enter a folder / album name.");
+                albumInput.focus();
+                return;
+            }
+
+            if (!files.length) {
+                alert("Please select at least one photo or video to upload.");
+                return;
+            }
+
+            btnUpload.disabled = true;
+            progressBox.style.display = 'block';
+            progressBar.style.width = '0%';
+
+            const uploadedItems = [];
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const pct = Math.round((i / files.length) * 100);
+                progressBar.style.width = `${pct}%`;
+                progressLabel.textContent = `Uploading (${i + 1}/${files.length}): ${file.name}`;
+
+                try {
+                    const response = await fetch(WORKER_UPLOAD_URL, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": file.type || "application/octet-stream",
+                            "X-Folder-Name": albumName,
+                            "X-File-Name": file.name
+                        },
+                        body: file
+                    });
+
+                    if (!response.ok) {
+                        const errData = await response.json().catch(() => ({}));
+                        throw new Error(errData.error || `HTTP error ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    uploadedItems.push({
+                        Title: file.name.replace(/\.[^/.]+$/, ""),
+                        Path: result.url
+                    });
+                } catch (err) {
+                    console.error("Upload failed for:", file.name, err);
+                    alert(`Failed to upload ${file.name}: ${err.message}`);
+                    btnUpload.disabled = false;
+                    progressLabel.textContent = "Upload encountered an error.";
+                    return;
+                }
+            }
+
+            progressBar.style.width = '100%';
+            progressLabel.textContent = `Successfully uploaded ${files.length} items to ${albumName}!`;
+
+            // Append album dynamically to local state
+            if (!vaultAlbums[category]) vaultAlbums[category] = [];
+            const existingAlbum = vaultAlbums[category].find(a => a.albumName.toLowerCase() === albumName.toLowerCase());
+
+            if (existingAlbum) {
+                existingAlbum.items.push(...uploadedItems);
+            } else {
+                vaultAlbums[category].push({
+                    albumName: albumName,
+                    cover: uploadedItems[0].Path,
+                    items: uploadedItems
+                });
+            }
+
+            // Refresh dashboards and categories
+            initVault();
+
+            // Reset upload form
+            albumInput.value = '';
+            fileInput.value = '';
+            document.getElementById('file-summary').textContent = '';
+            btnUpload.disabled = false;
+
+            // Automatically navigate to view the album
+            setTimeout(() => {
+                switchSection(category.toLowerCase());
+                renderCategoryAlbums(category);
+            }, 1200);
+        }
+
         function createFolderTile(album, onClickHandler) {
             const card = document.createElement('div');
             card.className = 'media-card';
@@ -696,12 +991,10 @@
             switchSection('videos');
         }
 
-        // Open album and show all photos inside
         function openAlbum(categoryKey, albumIndex) {
             const album = vaultAlbums[categoryKey][albumIndex];
             const lowerKey = categoryKey.toLowerCase();
             
-            // Activate the section first
             switchSection(lowerKey);
 
             const container = document.getElementById(lowerKey + '-full-row');
@@ -718,13 +1011,13 @@
             });
         }
 
-        // Render folder cards overview for a category
         function renderCategoryAlbums(categoryKey) {
             const lowerKey = categoryKey.toLowerCase();
             const container = document.getElementById(lowerKey + '-full-row');
             const titleEl = document.getElementById(lowerKey + '-section-title');
             const backBtn = document.getElementById(lowerKey + '-back-btn');
 
+            if (!container) return;
             backBtn.style.display = 'none';
             container.innerHTML = '';
 
@@ -745,7 +1038,6 @@
             });
         }
 
-        // Lightbox navigation
         function openAlbumGallery(images, startIndex = 0) {
             if (!images || !images.length) return;
             activeGalleryList = images;
@@ -790,7 +1082,6 @@
         });
 
         function initVault() {
-            // Render Videos
             const rowVideos = document.getElementById('row-videos');
             const videoCatalogRow = document.getElementById('video-catalog-row');
             if (rowVideos) rowVideos.innerHTML = '';
@@ -801,7 +1092,6 @@
                 if (videoCatalogRow) videoCatalogRow.appendChild(createVideoTile(v));
             });
 
-            // Populate dashboard rows with album cards
             const populateDashboardRow = (categoryKey, dashRowId) => {
                 const row = document.getElementById(dashRowId);
                 if (!row) return;
@@ -818,7 +1108,6 @@
             populateDashboardRow('Siblings', 'row-siblings');
             populateDashboardRow('Parents', 'row-parents');
 
-            // Populate category views
             renderCategoryAlbums('Weddings');
             renderCategoryAlbums('Honduras');
             renderCategoryAlbums('Miami');
