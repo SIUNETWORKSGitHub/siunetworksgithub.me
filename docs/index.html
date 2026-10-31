@@ -170,14 +170,16 @@
             position: relative;
             overflow: hidden;
         }
-        .media-poster img {
+        .media-poster img,
+        .media-poster video {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
             transition: transform 0.3s;
         }
-        .media-card:hover .media-poster img {
+        .media-card:hover .media-poster img,
+        .media-card:hover .media-poster video {
             transform: scale(1.05);
         }
         .media-badge {
@@ -339,7 +341,7 @@
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
+            transition: background 0.2s;
             margin-top: 10px;
         }
         .btn-vault-upload:hover {
@@ -407,6 +409,7 @@
             font-size: 14px;
         }
 
+        /* Lightbox modal with video support */
         .lightbox-modal {
             display: none;
             position: fixed;
@@ -418,12 +421,14 @@
             padding: 16px;
         }
         .lightbox-modal.active { display: flex; }
-        .lightbox-modal img {
+        .lightbox-modal img,
+        .lightbox-modal video {
             max-width: 90vw;
             max-height: 80vh;
             border-radius: 8px;
             object-fit: contain;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            outline: none;
         }
         .lightbox-close {
             position: absolute;
@@ -656,7 +661,11 @@
     <div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
         <span class="lightbox-close">&times;</span>
         <div class="lightbox-nav-btn lightbox-prev" onclick="prevLightboxImage(event)">&#10094;</div>
-        <img id="lightboxImg" src="" alt="Full view" onclick="event.stopPropagation()">
+        
+        <!-- Both Image and Video elements for seamless preview -->
+        <img id="lightboxImg" src="" alt="Full view" onclick="event.stopPropagation()" style="display:none;">
+        <video id="lightboxVideo" src="" controls playsinline onclick="event.stopPropagation()" style="display:none;"></video>
+        
         <div class="lightbox-nav-btn lightbox-next" onclick="nextLightboxImage(event)">&#10095;</div>
         <div class="lightbox-caption-box" id="lightboxCaption"></div>
     </div>
@@ -810,6 +819,10 @@
         let activeGalleryList = [];
         let activeGalleryIndex = 0;
 
+        function isVideoPath(path) {
+            return /\.(mp4|mov|webm|m4v)(\?.*)?$/i.test(path);
+        }
+
         function switchSection(secId) {
             document.querySelectorAll('.portal-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
@@ -822,7 +835,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // File selection label handler
         document.getElementById('upload-files').addEventListener('change', function(e) {
             const summary = document.getElementById('file-summary');
             if (this.files && this.files.length > 0) {
@@ -832,7 +844,6 @@
             }
         });
 
-        // Upload functionality connecting to Cloudflare Worker
         async function handleVaultUpload() {
             const categorySelect = document.getElementById('upload-category');
             const albumInput = document.getElementById('upload-album-name');
@@ -900,7 +911,6 @@
             document.getElementById('file-summary').textContent = '';
             btnUpload.disabled = false;
 
-            // Re-fetch all live R2 albums so the view updates immediately
             await initVault();
 
             setTimeout(() => {
@@ -912,13 +922,19 @@
         function createFolderTile(album, onClickHandler) {
             const card = document.createElement('div');
             card.className = 'media-card';
+            
+            const isVideoCover = isVideoPath(album.cover);
+            const coverMedia = isVideoCover 
+                ? `<video src="${album.cover}#t=0.5" preload="metadata" muted playsinline></video>`
+                : `<img src="${album.cover}" alt="${album.albumName}" loading="lazy">`;
+
             card.innerHTML = `
                 <div class="media-poster">
                     <span class="media-badge">ALBUM</span>
-                    <img src="${album.cover}" alt="${album.albumName}" loading="lazy">
+                    ${coverMedia}
                     <div class="album-card-overlay">
                         <h4>📁 ${album.albumName}</h4>
-                        <span>${album.items.length} Photos</span>
+                        <span>${album.items.length} Items</span>
                     </div>
                 </div>
             `;
@@ -929,12 +945,26 @@
         function createPhotoTile(item, onClickHandler) {
             const card = document.createElement('div');
             card.className = 'media-card';
-            card.innerHTML = `
-                <div class="media-poster">
-                    <span class="media-badge">PHOTO</span>
-                    <img src="${item.Path}" alt="${item.Title}" loading="lazy">
-                </div>
-            `;
+            const isVid = isVideoPath(item.Path);
+
+            if (isVid) {
+                card.innerHTML = `
+                    <div class="media-poster">
+                        <span class="media-badge">VIDEO</span>
+                        <video src="${item.Path}#t=0.5" preload="metadata" muted playsinline></video>
+                        <div class="media-play-overlay">
+                            <div class="play-button-icon">▶</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                card.innerHTML = `
+                    <div class="media-poster">
+                        <span class="media-badge">PHOTO</span>
+                        <img src="${item.Path}" alt="${item.Title}" loading="lazy">
+                    </div>
+                `;
+            }
             card.onclick = onClickHandler;
             return card;
         }
@@ -977,7 +1007,7 @@
             const titleEl = document.getElementById(lowerKey + '-section-title');
             const backBtn = document.getElementById(lowerKey + '-back-btn');
 
-            titleEl.textContent = `📁 ${album.albumName} (${album.items.length} Photos)`;
+            titleEl.textContent = `📁 ${album.albumName} (${album.items.length} Items)`;
             backBtn.style.display = 'inline';
             container.innerHTML = '';
 
@@ -1026,8 +1056,26 @@
             if (!activeGalleryList.length) return;
             const item = activeGalleryList[activeGalleryIndex];
             const imgEl = document.getElementById('lightboxImg');
+            const vidEl = document.getElementById('lightboxVideo');
             const capEl = document.getElementById('lightboxCaption');
-            imgEl.src = item.Path;
+            
+            const isVid = isVideoPath(item.Path);
+
+            if (isVid) {
+                imgEl.style.display = 'none';
+                imgEl.src = '';
+                vidEl.src = item.Path;
+                vidEl.style.display = 'block';
+                vidEl.load();
+                vidEl.play().catch(() => {});
+            } else {
+                vidEl.pause();
+                vidEl.style.display = 'none';
+                vidEl.src = '';
+                imgEl.src = item.Path;
+                imgEl.style.display = 'block';
+            }
+
             capEl.textContent = `${item.Title} (${activeGalleryIndex + 1} of ${activeGalleryList.length})`;
         }
 
@@ -1046,6 +1094,11 @@
         }
 
         function closeLightbox() {
+            const vidEl = document.getElementById('lightboxVideo');
+            if (vidEl) {
+                vidEl.pause();
+                vidEl.src = '';
+            }
             document.getElementById('lightbox').classList.remove('active');
         }
 
@@ -1058,13 +1111,11 @@
         });
 
         async function initVault() {
-            // Fetch dynamically loaded albums from Cloudflare R2 via our Worker
             try {
                 const res = await fetch(`${WORKER_UPLOAD_URL}/api/albums`);
                 if (res.ok) {
                     const liveAlbums = await res.json();
                     for (let [cat, albumMap] of Object.entries(liveAlbums)) {
-                        // Fallback: unassigned or General uploads display under Parents & Legacy
                         if (cat === "General") cat = "Parents";
 
                         if (!vaultAlbums[cat]) vaultAlbums[cat] = [];
