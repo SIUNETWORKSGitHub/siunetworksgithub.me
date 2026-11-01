@@ -377,6 +377,7 @@
             text-align: center;
         }
 
+        /* Hybrid Video Player Container */
         .video-player-container {
             width: 100%;
             background: #000;
@@ -392,13 +393,15 @@
             width: 100%;
             background: #000;
         }
-        .video-iframe-wrapper iframe {
+        .video-iframe-wrapper iframe,
+        .video-iframe-wrapper video {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             border: 0;
+            outline: none;
         }
         .player-bar {
             padding: 12px 16px;
@@ -513,7 +516,7 @@
         <!-- BROWSE ALL -->
         <section id="section-all" class="portal-section active">
             <div class="row-header">
-                <h3>🎬 Featured Family Films</h3>
+                <h3>🎬 Featured Family Films & Videos</h3>
                 <span onclick="switchSection('videos')">View Video Player &rarr;</span>
             </div>
             <div id="row-videos" class="netflix-row"></div>
@@ -560,6 +563,7 @@
                 <div class="form-group">
                     <label for="upload-category">Vault Category</label>
                     <select id="upload-category">
+                        <option value="Videos">Videos & Family Films</option>
                         <option value="Weddings">Weddings & Love Forever</option>
                         <option value="Parents">Parents & Legacy</option>
                         <option value="Honduras">San Pedro Sula & Honduras Family</option>
@@ -570,7 +574,7 @@
 
                 <div class="form-group">
                     <label for="upload-album-name">Folder / Album Name</label>
-                    <input type="text" id="upload-album-name" placeholder="e.g. El Momento del Anillo" required />
+                    <input type="text" id="upload-album-name" placeholder="e.g. Vacation Videos 2026, Birthday Highlights..." required />
                 </div>
 
                 <div class="form-group">
@@ -597,16 +601,26 @@
         <section id="section-videos" class="portal-section">
             <div class="video-player-container">
                 <div class="video-iframe-wrapper">
+                    <!-- Dual display: iframe for YouTube and native HTML5 video for R2 direct uploads -->
                     <iframe id="mainIframePlayer" src="https://www.youtube.com/embed/2D3rHOzWeEc" title="Declaration of Love" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                    <video id="mainNativePlayer" controls playsinline style="display:none;"></video>
                 </div>
                 <div class="player-bar">
                     <span><strong>Now Playing:</strong> <span id="currentVideoTitle" style="color: var(--accent-glow);">Declaration of Love</span></span>
-                    <span style="font-size: 11px; color: var(--text-secondary);">YouTube 1080p Stream</span>
+                    <span id="currentVideoBadge" style="font-size: 11px; color: var(--text-secondary);">YouTube 1080p Stream</span>
                 </div>
             </div>
 
+            <!-- Uploaded R2 Video Albums -->
             <div class="row-header">
-                <h3>Select From Video Vault</h3>
+                <h3 id="videos-albums-title">📁 Family Video Albums</h3>
+                <span id="videos-back-btn" style="display:none;" onclick="renderVideoVault()">&larr; Back to Video Albums</span>
+            </div>
+            <div id="video-albums-row" class="netflix-row" style="flex-wrap: wrap;"></div>
+
+            <!-- Featured Single Videos -->
+            <div class="row-header">
+                <h3>🎬 Featured Family Video Clips</h3>
             </div>
             <div id="video-catalog-row" class="netflix-row"></div>
         </section>
@@ -677,13 +691,16 @@
         const WORKER_UPLOAD_URL = "https://vault-uploader.robertoj-siulemus001.workers.dev";
         const R2_BASE_URL = "https://fotos.siunetworksgithub.me";
 
+        // Featured standalone films
+        const featuredVideos = [
+            { Title: "Declaration of Love", Path: "https://www.youtube.com/embed/2D3rHOzWeEc", Poster: "mywife.jpg", Badge: "FEATURED" },
+            { Title: "Bendecido 2022", Path: "https://www.youtube.com/embed/ZXb8Xzcnmcg", Poster: "family.jpg", Badge: "FEATURED" },
+            { Title: "Santi Cumpleaños", Path: "https://www.youtube.com/embed/JoYXJgyO0uI", Poster: "thebrothers.jpg", Badge: "FEATURED" },
+            { Title: "I Really Love My Family", Path: "https://www.youtube.com/embed/k-fCSQlG_UA", Poster: "mymother2.jpg", Badge: "FEATURED" }
+        ];
+
         const vaultAlbums = {
-            Videos: [
-                { Title: "Declaration of Love", Path: "https://www.youtube.com/embed/2D3rHOzWeEc", Poster: "mywife.jpg", Badge: "VIDEO" },
-                { Title: "Bendecido 2022", Path: "https://www.youtube.com/embed/ZXb8Xzcnmcg", Poster: "family.jpg", Badge: "VIDEO" },
-                { Title: "Santi Cumpleaños", Path: "https://www.youtube.com/embed/JoYXJgyO0uI", Poster: "thebrothers.jpg", Badge: "VIDEO" },
-                { Title: "I Really Love My Family", Path: "https://www.youtube.com/embed/k-fCSQlG_UA", Poster: "mymother2.jpg", Badge: "VIDEO" }
-            ],
+            Videos: [], // Uploaded video folders will populate here
             Weddings: [
                 {
                     albumName: "Wedding Celebration",
@@ -831,6 +848,10 @@
             if (sec) sec.classList.add('active');
             if (btn) btn.classList.add('active');
 
+            if (secId === 'videos') {
+                renderVideoVault();
+            }
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -914,7 +935,11 @@
 
             setTimeout(() => {
                 switchSection(category.toLowerCase());
-                renderCategoryAlbums(category);
+                if (category === "Videos") {
+                    renderVideoVault();
+                } else {
+                    renderCategoryAlbums(category);
+                }
             }, 1000);
         }
 
@@ -968,12 +993,12 @@
             return card;
         }
 
-        function createVideoTile(video) {
+        function createFeaturedVideoTile(video) {
             const card = document.createElement('div');
             card.className = 'media-card';
             card.innerHTML = `
                 <div class="media-poster">
-                    <span class="media-badge">VIDEO</span>
+                    <span class="media-badge">${video.Badge || 'VIDEO'}</span>
                     <img src="${video.Poster}" alt="${video.Title}" loading="lazy">
                     <div class="media-play-overlay">
                         <div class="play-button-icon">▶</div>
@@ -984,16 +1009,81 @@
                     </div>
                 </div>
             `;
-            card.onclick = () => playSelectedVideo(video.Path, video.Title);
+            card.onclick = () => playSelectedVideo(video.Path, video.Title, false);
             return card;
         }
 
-        function playSelectedVideo(embedUrl, title) {
+        function playSelectedVideo(url, title, isNativeR2 = false) {
             const iframe = document.getElementById('mainIframePlayer');
+            const nativeVideo = document.getElementById('mainNativePlayer');
             const titleEl = document.getElementById('currentVideoTitle');
-            iframe.src = embedUrl;
+            const badgeEl = document.getElementById('currentVideoBadge');
+
             titleEl.textContent = title;
+
+            if (isNativeR2 || isVideoPath(url)) {
+                iframe.style.display = 'none';
+                iframe.src = '';
+                nativeVideo.src = url;
+                nativeVideo.style.display = 'block';
+                nativeVideo.load();
+                nativeVideo.play().catch(() => {});
+                badgeEl.textContent = "Vault R2 Cloud Stream";
+            } else {
+                nativeVideo.pause();
+                nativeVideo.style.display = 'none';
+                nativeVideo.src = '';
+                iframe.src = url;
+                iframe.style.display = 'block';
+                badgeEl.textContent = "YouTube 1080p Stream";
+            }
+
             switchSection('videos');
+        }
+
+        function renderVideoVault() {
+            const container = document.getElementById('video-albums-row');
+            const titleEl = document.getElementById('videos-albums-title');
+            const backBtn = document.getElementById('videos-back-btn');
+            const featuredRow = document.getElementById('video-catalog-row');
+
+            if (!container) return;
+            backBtn.style.display = 'none';
+            container.innerHTML = '';
+            titleEl.textContent = '📁 Family Video Albums';
+
+            // Populate featured row
+            if (featuredRow) {
+                featuredRow.innerHTML = '';
+                featuredVideos.forEach(v => featuredRow.appendChild(createFeaturedVideoTile(v)));
+            }
+
+            const videoAlbums = vaultAlbums.Videos || [];
+            if (videoAlbums.length === 0) {
+                container.innerHTML = `<p style="font-size: 13px; color: var(--text-secondary); padding: 10px 0;">No dedicated video albums yet. Use "Upload Album" to add one!</p>`;
+                return;
+            }
+
+            videoAlbums.forEach((album, idx) => {
+                const folderCard = createFolderTile(album, () => openVideoAlbum(idx));
+                container.appendChild(folderCard);
+            });
+        }
+
+        function openVideoAlbum(albumIndex) {
+            const album = vaultAlbums.Videos[albumIndex];
+            const container = document.getElementById('video-albums-row');
+            const titleEl = document.getElementById('videos-albums-title');
+            const backBtn = document.getElementById('videos-back-btn');
+
+            titleEl.textContent = `📁 ${album.albumName} (${album.items.length} Videos)`;
+            backBtn.style.display = 'inline';
+            container.innerHTML = '';
+
+            album.items.forEach((item, idx) => {
+                const tile = createPhotoTile(item, () => playSelectedVideo(item.Path, item.Title, true));
+                container.appendChild(tile);
+            });
         }
 
         function openAlbum(categoryKey, albumIndex) {
@@ -1017,6 +1107,11 @@
         }
 
         function renderCategoryAlbums(categoryKey) {
+            if (categoryKey === "Videos") {
+                renderVideoVault();
+                return;
+            }
+
             const lowerKey = categoryKey.toLowerCase();
             const container = document.getElementById(lowerKey + '-full-row');
             const titleEl = document.getElementById(lowerKey + '-section-title');
@@ -1132,16 +1227,14 @@
                 console.warn("Could not load dynamic albums from R2, relying on base catalog:", err);
             }
 
+            // Render Featured Videos row on Browse All
             const rowVideos = document.getElementById('row-videos');
-            const videoCatalogRow = document.getElementById('video-catalog-row');
-            if (rowVideos) rowVideos.innerHTML = '';
-            if (videoCatalogRow) videoCatalogRow.innerHTML = '';
+            if (rowVideos) {
+                rowVideos.innerHTML = '';
+                featuredVideos.forEach(v => rowVideos.appendChild(createFeaturedVideoTile(v)));
+            }
 
-            vaultAlbums.Videos.forEach(v => {
-                if (rowVideos) rowVideos.appendChild(createVideoTile(v));
-                if (videoCatalogRow) videoCatalogRow.appendChild(createVideoTile(v));
-            });
-
+            // Populate dashboard rows
             const populateDashboardRow = (categoryKey, dashRowId) => {
                 const row = document.getElementById(dashRowId);
                 if (!row) return;
@@ -1158,11 +1251,13 @@
             populateDashboardRow('Siblings', 'row-siblings');
             populateDashboardRow('Parents', 'row-parents');
 
+            // Render category views
             renderCategoryAlbums('Weddings');
             renderCategoryAlbums('Honduras');
             renderCategoryAlbums('Miami');
             renderCategoryAlbums('Siblings');
             renderCategoryAlbums('Parents');
+            renderVideoVault();
         }
 
         if (document.readyState === 'loading') {
