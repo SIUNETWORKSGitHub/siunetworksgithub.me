@@ -515,6 +515,13 @@
     <main>
         <!-- BROWSE ALL -->
         <section id="section-all" class="portal-section active">
+            <!-- Dedicated Uploaded Video Albums row on main dashboard -->
+            <div class="row-header" id="header-dash-video-albums" style="display:none;">
+                <h3>📹 Family Video Vault & Albums</h3>
+                <span onclick="switchSection('videos')">View Video Player &rarr;</span>
+            </div>
+            <div id="row-video-albums" class="netflix-row" style="display:none;"></div>
+
             <div class="row-header">
                 <h3>🎬 Featured Family Films & Videos</h3>
                 <span onclick="switchSection('videos')">View Video Player &rarr;</span>
@@ -574,7 +581,7 @@
 
                 <div class="form-group">
                     <label for="upload-album-name">Folder / Album Name</label>
-                    <input type="text" id="upload-album-name" placeholder="e.g. Vacation Videos 2026, Birthday Highlights..." required />
+                    <input type="text" id="upload-album-name" placeholder="e.g. Guia Como Subir Fotos y Videos..." required />
                 </div>
 
                 <div class="form-group">
@@ -601,7 +608,6 @@
         <section id="section-videos" class="portal-section">
             <div class="video-player-container">
                 <div class="video-iframe-wrapper">
-                    <!-- Dual display: iframe for YouTube and native HTML5 video for R2 direct uploads -->
                     <iframe id="mainIframePlayer" src="https://www.youtube.com/embed/2D3rHOzWeEc" title="Declaration of Love" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
                     <video id="mainNativePlayer" controls playsinline style="display:none;"></video>
                 </div>
@@ -691,7 +697,6 @@
         const WORKER_UPLOAD_URL = "https://vault-uploader.robertoj-siulemus001.workers.dev";
         const R2_BASE_URL = "https://fotos.siunetworksgithub.me";
 
-        // Featured standalone films
         const featuredVideos = [
             { Title: "Declaration of Love", Path: "https://www.youtube.com/embed/2D3rHOzWeEc", Poster: "mywife.jpg", Badge: "FEATURED" },
             { Title: "Bendecido 2022", Path: "https://www.youtube.com/embed/ZXb8Xzcnmcg", Poster: "family.jpg", Badge: "FEATURED" },
@@ -700,7 +705,7 @@
         ];
 
         const vaultAlbums = {
-            Videos: [], // Uploaded video folders will populate here
+            Videos: [],
             Weddings: [
                 {
                     albumName: "Wedding Celebration",
@@ -1052,7 +1057,6 @@
             container.innerHTML = '';
             titleEl.textContent = '📁 Family Video Albums';
 
-            // Populate featured row
             if (featuredRow) {
                 featuredRow.innerHTML = '';
                 featuredVideos.forEach(v => featuredRow.appendChild(createFeaturedVideoTile(v)));
@@ -1227,6 +1231,28 @@
                 console.warn("Could not load dynamic albums from R2, relying on base catalog:", err);
             }
 
+            // Populate Video Albums row on Browse All if video albums exist
+            const dashVideoAlbumsRow = document.getElementById('row-video-albums');
+            const dashVideoAlbumsHeader = document.getElementById('header-dash-video-albums');
+            const videoAlbums = vaultAlbums.Videos || [];
+
+            if (dashVideoAlbumsRow && dashVideoAlbumsHeader) {
+                if (videoAlbums.length > 0) {
+                    dashVideoAlbumsRow.innerHTML = '';
+                    dashVideoAlbumsHeader.style.display = 'flex';
+                    dashVideoAlbumsRow.style.display = 'flex';
+                    videoAlbums.forEach((album, idx) => {
+                        dashVideoAlbumsRow.appendChild(createFolderTile(album, () => {
+                            switchSection('videos');
+                            openVideoAlbum(idx);
+                        }));
+                    });
+                } else {
+                    dashVideoAlbumsHeader.style.display = 'none';
+                    dashVideoAlbumsRow.style.display = 'none';
+                }
+            }
+
             // Render Featured Videos row on Browse All
             const rowVideos = document.getElementById('row-videos');
             if (rowVideos) {
@@ -1234,7 +1260,7 @@
                 featuredVideos.forEach(v => rowVideos.appendChild(createFeaturedVideoTile(v)));
             }
 
-            // Populate dashboard rows
+            // Populate dashboard photo rows
             const populateDashboardRow = (categoryKey, dashRowId) => {
                 const row = document.getElementById(dashRowId);
                 if (!row) return;
