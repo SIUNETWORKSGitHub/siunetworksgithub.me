@@ -240,7 +240,6 @@
             color: var(--accent-glow);
             font-weight: 500;
         }
-        /* Upload Album Section Styling */
         .vault-upload-wrapper {
             max-width: 680px;
             margin: 20px auto 40px;
@@ -366,7 +365,6 @@
             display: block;
             text-align: center;
         }
-        /* Hybrid Video Player Container */
         .video-player-container {
             width: 100%;
             background: #000;
@@ -400,7 +398,6 @@
             align-items: center;
             font-size: 14px;
         }
-        /* Lightbox modal with video support */
         .lightbox-modal {
             display: none;
             position: fixed;
@@ -470,7 +467,7 @@
             font-size: 13px;
             border: 1px solid var(--border-color);
         }
-        /* CAMILUCHI BOT FLOATING WIDGET */
+        /* CAMILUCHI BOT NATIVE WIDGET STYLES */
         .camiluchi-fab {
             position: fixed;
             bottom: 24px;
@@ -516,7 +513,7 @@
             bottom: 96px;
             right: 24px;
             width: 390px;
-            height: 600px;
+            height: 560px;
             max-width: calc(100vw - 32px);
             max-height: calc(100vh - 120px);
             background: #111827;
@@ -550,10 +547,11 @@
             gap: 10px;
         }
         .camiluchi-header-info img {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            border: 1px solid var(--accent-glow);
+            border: 1.5px solid var(--accent-glow);
+            object-fit: cover;
         }
         .camiluchi-header-info div h4 {
             font-size: 14px;
@@ -583,15 +581,81 @@
         }
         .camiluchi-chat-body {
             flex: 1;
-            width: 100%;
-            height: 100%;
+            padding: 14px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 13px;
             background: #0f172a;
-            position: relative;
+            scrollbar-width: thin;
+            scrollbar-color: #334155 transparent;
         }
-        .camiluchi-chat-body iframe {
-            width: 100%;
-            height: 100%;
+        .camiluchi-chat-body::-webkit-scrollbar { width: 6px; }
+        .camiluchi-chat-body::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        .chat-bubble {
+            padding: 10px 14px;
+            border-radius: 12px;
+            max-width: 85%;
+            line-height: 1.45;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        .chat-bubble.bot {
+            background: #1e293b;
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom-left-radius: 2px;
+            align-self: flex-start;
+        }
+        .chat-bubble.user {
+            background: var(--accent-teal);
+            color: #fff;
+            border-bottom-right-radius: 2px;
+            align-self: flex-end;
+        }
+        .chat-bubble.typing {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        .camiluchi-chat-form {
+            display: flex;
+            gap: 8px;
+            padding: 10px 14px;
+            background: #1e293b;
+            border-top: 1px solid var(--border-color);
+        }
+        .camiluchi-chat-form input {
+            flex: 1;
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #fff;
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .camiluchi-chat-form input:focus {
+            border-color: var(--accent-glow);
+        }
+        .camiluchi-chat-form button {
+            background: var(--accent-teal);
             border: none;
+            color: #fff;
+            border-radius: 8px;
+            padding: 9px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .camiluchi-chat-form button:hover {
+            background: var(--accent-glow);
+        }
+        .camiluchi-chat-form button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         footer {
             text-align: center;
@@ -776,6 +840,7 @@
             <div id="hobbies-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
         </section>
     </main>
+
     <!-- FULLSCREEN LIGHTBOX -->
     <div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
         <span class="lightbox-close">&times;</span>
@@ -788,11 +853,12 @@
         <div class="lightbox-caption-box" id="lightboxCaption"></div>
     </div>
 
-    <!-- CAMILUCHI BOT FLOATING ACTION BUTTON & WINDOW -->
+    <!-- CAMILUCHI BOT NATIVE FLOATING WIDGET -->
     <div id="camiluchiFab" class="camiluchi-fab" onclick="toggleCamiluchiChat()" title="Talk to Camiluchi Bot">
         <span class="camiluchi-badge">AI</span>
         <img src="mywife.jpg" alt="Camiluchi Bot" onerror="this.src='family.jpg'">
     </div>
+
     <div id="camiluchiWindow" class="camiluchi-chat-window">
         <div class="camiluchi-chat-header">
             <div class="camiluchi-header-info">
@@ -802,16 +868,25 @@
                     <span>Family Vault Assistant</span>
                 </div>
             </div>
-            <button class="camiluchi-btn-close" onclick="toggleCamiluchiChat()">&times;</button>
+            <button class="camiluchi-btn-close" onclick="toggleCamiluchiChat()" aria-label="Close Chat">&times;</button>
         </div>
-        <div class="camiluchi-chat-body">
-            <iframe id="camiluchiFrame" src="" allow="microphone; camera" frameborder="0"></iframe>
+        
+        <div id="camiluchiChatMessages" class="camiluchi-chat-body">
+            <div class="chat-bubble bot">
+                👋 ¡Hola! Soy Camiluchi Bot. Te puedo ayudar a navegar las categorías del Siu Family Vault, ver recuerdos o guiarte para subir fotos y videos bajo el límite de 100 MB. ¿En qué te ayudo hoy?
+            </div>
         </div>
+
+        <form class="camiluchi-chat-form" onsubmit="sendCamiluchiMessage(event)">
+            <input type="text" id="camiluchiInput" placeholder="Ask in English or Español..." autocomplete="off" />
+            <button type="submit" id="camiluchiSendBtn">Send</button>
+        </form>
     </div>
 
     <footer>
         &copy; Siu Family Digital Heritage &bull; siunetworksgithub.me
     </footer>
+
     <script>
         const WORKER_UPLOAD_URL = "https://vault-uploader.robertoj-siulemus001.workers.dev";
         const R2_BASE_URL = "https://fotos.siunetworksgithub.me";
@@ -956,21 +1031,64 @@
         };
         let activeGalleryList = [];
         let activeGalleryIndex = 0;
-        const CAMILUCHI_EMBED_URL = "https://copilotstudio.microsoft.com/environments/Default-6fde3641-17f6-4aaa-a666-1e594b8b6757/bots/crd69_82c1ac41-5929-43ee-81d5-3bcf31729cf9/webchat?__version__=2&enableFileAttachment=false";
+        const chatHistory = [];
 
         function toggleCamiluchiChat() {
             const chatWin = document.getElementById('camiluchiWindow');
-            const frame = document.getElementById('camiluchiFrame');
-            const isOpen = chatWin.classList.contains('open');
-            if (isOpen) {
-                chatWin.classList.remove('open');
-            } else {
-                if (!frame.src || frame.src === "" || frame.src === window.location.href) {
-                    frame.src = CAMILUCHI_EMBED_URL;
-                }
-                chatWin.classList.add('open');
+            chatWin.classList.toggle('open');
+            if (chatWin.classList.contains('open')) {
+                document.getElementById('camiluchiInput').focus();
             }
         }
+
+        async function sendCamiluchiMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('camiluchiInput');
+            const sendBtn = document.getElementById('camiluchiSendBtn');
+            const messagesContainer = document.getElementById('camiluchiChatMessages');
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Render user bubble
+            const userBubble = document.createElement('div');
+            userBubble.className = 'chat-bubble user';
+            userBubble.textContent = text;
+            messagesContainer.appendChild(userBubble);
+            input.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Render loading bubble
+            const loadingBubble = document.createElement('div');
+            loadingBubble.className = 'chat-bubble bot typing';
+            loadingBubble.textContent = "Camiluchi is typing...";
+            messagesContainer.appendChild(loadingBubble);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            sendBtn.disabled = true;
+
+            try {
+                const res = await fetch(`${WORKER_UPLOAD_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text, history: chatHistory })
+                });
+                const data = await res.json();
+                const replyText = data.reply || data.error || "No response received.";
+                
+                loadingBubble.className = 'chat-bubble bot';
+                loadingBubble.textContent = replyText;
+
+                chatHistory.push({ role: "user", content: text });
+                chatHistory.push({ role: "assistant", content: replyText });
+            } catch (err) {
+                loadingBubble.className = 'chat-bubble bot';
+                loadingBubble.style.color = "#f87171";
+                loadingBubble.textContent = "Error connecting to Camiluchi Bot. Please check network connection.";
+            } finally {
+                sendBtn.disabled = false;
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        }
+
         function isVideoPath(path) {
             return /\.(mp4|mov|webm|m4v)(\?.*)?$/i.test(path);
         }
@@ -1314,7 +1432,6 @@
             } catch (err) {
                 console.warn("Could not load dynamic albums from R2, relying on base catalog:", err);
             }
-            // Populate Video Albums row on Browse All if video albums exist
             const dashVideoAlbumsRow = document.getElementById('row-video-albums');
             const dashVideoAlbumsHeader = document.getElementById('header-dash-video-albums');
             const videoAlbums = vaultAlbums.Videos || [];
@@ -1334,13 +1451,11 @@
                     dashVideoAlbumsRow.style.display = 'none';
                 }
             }
-            // Render Featured Videos row on Browse All
             const rowVideos = document.getElementById('row-videos');
             if (rowVideos) {
                 rowVideos.innerHTML = '';
                 featuredVideos.forEach(v => rowVideos.appendChild(createFeaturedVideoTile(v)));
             }
-            // Populate dashboard photo rows
             const populateDashboardRow = (categoryKey, dashRowId) => {
                 const row = document.getElementById(dashRowId);
                 if (!row) return;
@@ -1356,7 +1471,6 @@
             populateDashboardRow('Siblings', 'row-siblings');
             populateDashboardRow('Parents', 'row-parents');
             populateDashboardRow('Hobbies', 'row-hobbies');
-            // Render category views
             renderCategoryAlbums('Weddings');
             renderCategoryAlbums('Honduras');
             renderCategoryAlbums('Miami');
