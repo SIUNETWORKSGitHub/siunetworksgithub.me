@@ -16,7 +16,6 @@
             --border-color: rgba(255, 255, 255, 0.08);
             --card-radius: 12px;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
@@ -29,7 +28,6 @@
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
         }
-
         .app-header {
             position: sticky;
             top: 0;
@@ -55,7 +53,6 @@
             cursor: pointer;
             letter-spacing: -0.5px;
         }
-
         .category-nav {
             display: flex;
             gap: 8px;
@@ -98,7 +95,6 @@
             background: var(--accent-teal);
             color: #fff;
         }
-
         main {
             flex: 1;
             max-width: 1400px;
@@ -106,11 +102,9 @@
             margin: 0 auto;
             padding: 20px 16px 40px;
         }
-
         .portal-section { display: none; animation: fadeIn 0.3s ease; }
         .portal-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
         .row-header {
             display: flex;
             justify-content: space-between;
@@ -128,7 +122,6 @@
             font-weight: 600;
             cursor: pointer;
         }
-
         .netflix-row {
             display: flex;
             gap: 14px;
@@ -141,7 +134,6 @@
         }
         .netflix-row::-webkit-scrollbar { height: 6px; }
         .netflix-row::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-
         .media-card {
             flex: 0 0 240px;
             scroll-snap-align: start;
@@ -225,7 +217,6 @@
             transform: scale(1.1);
             background: var(--accent-glow);
         }
-
         .album-card-overlay {
             position: absolute;
             bottom: 0;
@@ -249,7 +240,6 @@
             color: var(--accent-glow);
             font-weight: 500;
         }
-
         /* Upload Album Section Styling */
         .vault-upload-wrapper {
             max-width: 680px;
@@ -376,7 +366,6 @@
             display: block;
             text-align: center;
         }
-
         /* Hybrid Video Player Container */
         .video-player-container {
             width: 100%;
@@ -411,7 +400,6 @@
             align-items: center;
             font-size: 14px;
         }
-
         /* Lightbox modal with video support */
         .lightbox-modal {
             display: none;
@@ -482,7 +470,129 @@
             font-size: 13px;
             border: 1px solid var(--border-color);
         }
-
+        /* CAMILUCHI BOT FLOATING WIDGET */
+        .camiluchi-fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0d9488, #0284c7);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(20, 184, 166, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1500;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+            user-select: none;
+        }
+        .camiluchi-fab:hover {
+            transform: scale(1.08);
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6), 0 0 22px rgba(20, 184, 166, 0.8);
+        }
+        .camiluchi-fab img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .camiluchi-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 10px;
+            padding: 2px 6px;
+            border: 2px solid #0f172a;
+        }
+        .camiluchi-chat-window {
+            position: fixed;
+            bottom: 96px;
+            right: 24px;
+            width: 390px;
+            height: 600px;
+            max-width: calc(100vw - 32px);
+            max-height: calc(100vh - 120px);
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 16px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1500;
+            animation: slideUpChat 0.25s ease-out forwards;
+        }
+        .camiluchi-chat-window.open {
+            display: flex;
+        }
+        @keyframes slideUpChat {
+            from { opacity: 0; transform: translateY(18px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .camiluchi-chat-header {
+            background: linear-gradient(90deg, #0f172a, #1e293b);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .camiluchi-header-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .camiluchi-header-info img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--accent-glow);
+        }
+        .camiluchi-header-info div h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #f8fafc;
+            line-height: 1.2;
+        }
+        .camiluchi-header-info div span {
+            font-size: 11px;
+            color: var(--accent-glow);
+            font-weight: 500;
+        }
+        .camiluchi-btn-close {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 22px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: color 0.2s, background 0.2s;
+        }
+        .camiluchi-btn-close:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .camiluchi-chat-body {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            position: relative;
+        }
+        .camiluchi-chat-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
         footer {
             text-align: center;
             padding: 20px;
@@ -494,7 +604,6 @@
     </style>
 </head>
 <body oncontextmenu="return false;">
-
     <header class="app-header">
         <div class="header-top">
             <h1 onclick="switchSection('all')">Siu Family Vault</h1>
@@ -512,60 +621,50 @@
             <button id="btn-upload" class="nav-pill upload-pill" onclick="switchSection('upload')">➕ Upload Album</button>
         </nav>
     </header>
-
     <main>
         <!-- BROWSE ALL -->
         <section id="section-all" class="portal-section active">
-            <!-- Dedicated Uploaded Video Albums row on main dashboard -->
             <div class="row-header" id="header-dash-video-albums" style="display:none;">
                 <h3>📹 Family Video Vault & Albums</h3>
                 <span onclick="switchSection('videos')">View Video Player &rarr;</span>
             </div>
             <div id="row-video-albums" class="netflix-row" style="display:none;"></div>
-
             <div class="row-header">
                 <h3>🎬 Featured Family Films & Videos</h3>
                 <span onclick="switchSection('videos')">View Video Player &rarr;</span>
             </div>
             <div id="row-videos" class="netflix-row"></div>
-
             <div class="row-header">
                 <h3>💍 Weddings & Love Forever</h3>
                 <span onclick="switchSection('weddings'); renderCategoryAlbums('Weddings');">View All Folders &rarr;</span>
             </div>
             <div id="row-weddings" class="netflix-row"></div>
-
             <div class="row-header">
                 <h3>🇭🇳 San Pedro Sula & Honduras Family</h3>
                 <span onclick="switchSection('honduras'); renderCategoryAlbums('Honduras');">View All Folders &rarr;</span>
             </div>
             <div id="row-honduras" class="netflix-row"></div>
-
             <div class="row-header">
                 <h3>🌴 Miami Family & The Kids</h3>
                 <span onclick="switchSection('miami'); renderCategoryAlbums('Miami');">View All Folders &rarr;</span>
             </div>
             <div id="row-miami" class="netflix-row"></div>
-
             <div class="row-header">
                 <h3>👥 Brothers & Sisters</h3>
                 <span onclick="switchSection('siblings'); renderCategoryAlbums('Siblings');">View All Folders &rarr;</span>
             </div>
             <div id="row-siblings" class="netflix-row"></div>
-
             <div class="row-header">
                 <h3>❤️ Parents & Legacy</h3>
                 <span onclick="switchSection('parents'); renderCategoryAlbums('Parents');">View All Folders &rarr;</span>
             </div>
             <div id="row-parents" class="netflix-row"></div>
-
             <div class="row-header">
                 <h3>🎨 Our Hobbies & Entertainment</h3>
                 <span onclick="switchSection('hobbies'); renderCategoryAlbums('Hobbies');">View All Folders &rarr;</span>
             </div>
             <div id="row-hobbies" class="netflix-row"></div>
         </section>
-
         <!-- UPLOAD SECTION -->
         <section id="section-upload" class="portal-section">
             <div class="vault-upload-wrapper">
@@ -573,7 +672,6 @@
                     <h2>Upload your album here</h2>
                     <p>Add new memories, milestones, and family photo collections directly into the secure cloud vault.</p>
                 </div>
-
                 <div class="form-group">
                     <label for="upload-category">Vault Category</label>
                     <select id="upload-category">
@@ -586,12 +684,10 @@
                         <option value="Siblings">Brothers & Sisters</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label for="upload-album-name">Folder / Album Name</label>
                     <input type="text" id="upload-album-name" placeholder="e.g. Fishing Trips, Art & Painting, Music..." required />
                 </div>
-
                 <div class="form-group">
                     <label>Choose Photos or Videos</label>
                     <div class="file-dropzone" onclick="document.getElementById('upload-files').click()">
@@ -600,9 +696,7 @@
                         <div id="file-summary" class="file-summary"></div>
                     </div>
                 </div>
-
                 <button id="btn-submit-upload" class="btn-vault-upload" type="button" onclick="handleVaultUpload()">Upload to Vault</button>
-
                 <div id="upload-progress-box" class="upload-progress-container">
                     <div class="progress-track">
                         <div id="upload-progress-bar" class="progress-fill"></div>
@@ -611,7 +705,6 @@
                 </div>
             </div>
         </section>
-
         <!-- VIDEOS SECTION -->
         <section id="section-videos" class="portal-section">
             <div class="video-player-container">
@@ -624,19 +717,16 @@
                     <span id="currentVideoBadge" style="font-size: 11px; color: var(--text-secondary);">YouTube 1080p Stream</span>
                 </div>
             </div>
-
             <div class="row-header">
                 <h3 id="videos-albums-title">📁 Family Video Albums</h3>
                 <span id="videos-back-btn" style="display:none;" onclick="renderVideoVault()">&larr; Back to Video Albums</span>
             </div>
             <div id="video-albums-row" class="netflix-row" style="flex-wrap: wrap;"></div>
-
             <div class="row-header">
                 <h3>🎬 Featured Family Video Clips</h3>
             </div>
             <div id="video-catalog-row" class="netflix-row"></div>
         </section>
-
         <!-- WEDDINGS & LOVE SECTION -->
         <section id="section-weddings" class="portal-section">
             <div class="row-header">
@@ -645,7 +735,6 @@
             </div>
             <div id="weddings-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
         </section>
-
         <!-- HONDURAS SECTION -->
         <section id="section-honduras" class="portal-section">
             <div class="row-header">
@@ -654,7 +743,6 @@
             </div>
             <div id="honduras-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
         </section>
-
         <!-- MIAMI & KIDS SECTION -->
         <section id="section-miami" class="portal-section">
             <div class="row-header">
@@ -663,7 +751,6 @@
             </div>
             <div id="miami-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
         </section>
-
         <!-- SIBLINGS SECTION -->
         <section id="section-siblings" class="portal-section">
             <div class="row-header">
@@ -672,7 +759,6 @@
             </div>
             <div id="siblings-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
         </section>
-
         <!-- PARENTS SECTION -->
         <section id="section-parents" class="portal-section">
             <div class="row-header">
@@ -681,7 +767,6 @@
             </div>
             <div id="parents-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
         </section>
-
         <!-- HOBBIES & ENTERTAINMENT SECTION -->
         <section id="section-hobbies" class="portal-section">
             <div class="row-header">
@@ -691,7 +776,6 @@
             <div id="hobbies-full-row" class="netflix-row" style="flex-wrap: wrap;"></div>
         </section>
     </main>
-
     <!-- FULLSCREEN LIGHTBOX -->
     <div id="lightbox" class="lightbox-modal" onclick="closeLightbox()">
         <span class="lightbox-close">&times;</span>
@@ -704,21 +788,39 @@
         <div class="lightbox-caption-box" id="lightboxCaption"></div>
     </div>
 
+    <!-- CAMILUCHI BOT FLOATING ACTION BUTTON & WINDOW -->
+    <div id="camiluchiFab" class="camiluchi-fab" onclick="toggleCamiluchiChat()" title="Talk to Camiluchi Bot">
+        <span class="camiluchi-badge">AI</span>
+        <img src="mywife.jpg" alt="Camiluchi Bot" onerror="this.src='family.jpg'">
+    </div>
+    <div id="camiluchiWindow" class="camiluchi-chat-window">
+        <div class="camiluchi-chat-header">
+            <div class="camiluchi-header-info">
+                <img src="mywife.jpg" alt="Camiluchi Bot" onerror="this.src='family.jpg'">
+                <div>
+                    <h4>Camiluchi Bot</h4>
+                    <span>Family Vault Assistant</span>
+                </div>
+            </div>
+            <button class="camiluchi-btn-close" onclick="toggleCamiluchiChat()">&times;</button>
+        </div>
+        <div class="camiluchi-chat-body">
+            <iframe id="camiluchiFrame" src="" allow="microphone; camera" frameborder="0"></iframe>
+        </div>
+    </div>
+
     <footer>
         &copy; Siu Family Digital Heritage &bull; siunetworksgithub.me
     </footer>
-
     <script>
         const WORKER_UPLOAD_URL = "https://vault-uploader.robertoj-siulemus001.workers.dev";
         const R2_BASE_URL = "https://fotos.siunetworksgithub.me";
-
         const featuredVideos = [
             { Title: "Declaration of Love", Path: "https://www.youtube.com/embed/2D3rHOzWeEc", Poster: "mywife.jpg", Badge: "FEATURED" },
             { Title: "Bendecido 2022", Path: "https://www.youtube.com/embed/ZXb8Xzcnmcg", Poster: "family.jpg", Badge: "FEATURED" },
             { Title: "Santi Cumpleaños", Path: "https://www.youtube.com/embed/JoYXJgyO0uI", Poster: "thebrothers.jpg", Badge: "FEATURED" },
             { Title: "I Really Love My Family", Path: "https://www.youtube.com/embed/k-fCSQlG_UA", Poster: "mymother2.jpg", Badge: "FEATURED" }
         ];
-
         const vaultAlbums = {
             Videos: [],
             Hobbies: [],
@@ -852,30 +954,38 @@
                 }
             ]
         };
-
         let activeGalleryList = [];
         let activeGalleryIndex = 0;
+        const CAMILUCHI_EMBED_URL = "https://copilotstudio.microsoft.com/environments/Default-6fde3641-17f6-4aaa-a666-1e594b8b6757/bots/crd69_82c1ac41-5929-43ee-81d5-3bcf31729cf9/webchat?__version__=2&enableFileAttachment=false";
 
+        function toggleCamiluchiChat() {
+            const chatWin = document.getElementById('camiluchiWindow');
+            const frame = document.getElementById('camiluchiFrame');
+            const isOpen = chatWin.classList.contains('open');
+            if (isOpen) {
+                chatWin.classList.remove('open');
+            } else {
+                if (!frame.src || frame.src === "" || frame.src === window.location.href) {
+                    frame.src = CAMILUCHI_EMBED_URL;
+                }
+                chatWin.classList.add('open');
+            }
+        }
         function isVideoPath(path) {
             return /\.(mp4|mov|webm|m4v)(\?.*)?$/i.test(path);
         }
-
         function switchSection(secId) {
             document.querySelectorAll('.portal-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-pill').forEach(b => b.classList.remove('active'));
-
             const sec = document.getElementById('section-' + secId);
             const btn = document.getElementById('btn-' + secId);
             if (sec) sec.classList.add('active');
             if (btn) btn.classList.add('active');
-
             if (secId === 'videos') {
                 renderVideoVault();
             }
-
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
         document.getElementById('upload-files').addEventListener('change', function(e) {
             const summary = document.getElementById('file-summary');
             if (this.files && this.files.length > 0) {
@@ -884,7 +994,6 @@
                 summary.textContent = '';
             }
         });
-
         async function handleVaultUpload() {
             const categorySelect = document.getElementById('upload-category');
             const albumInput = document.getElementById('upload-album-name');
@@ -893,32 +1002,26 @@
             const progressBox = document.getElementById('upload-progress-box');
             const progressBar = document.getElementById('upload-progress-bar');
             const progressLabel = document.getElementById('upload-progress-label');
-
             const category = categorySelect.value;
             const albumName = albumInput.value.trim();
             const files = Array.from(fileInput.files);
-
             if (!albumName) {
                 alert("Please enter a folder / album name.");
                 albumInput.focus();
                 return;
             }
-
             if (!files.length) {
                 alert("Please select at least one photo or video to upload.");
                 return;
             }
-
             btnUpload.disabled = true;
             progressBox.style.display = 'block';
             progressBar.style.width = '0%';
-
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const pct = Math.round((i / files.length) * 100);
                 progressBar.style.width = `${pct}%`;
                 progressLabel.textContent = `Uploading (${i + 1}/${files.length}): ${file.name}`;
-
                 try {
                     const response = await fetch(WORKER_UPLOAD_URL, {
                         method: "PUT",
@@ -930,7 +1033,6 @@
                         },
                         body: file
                     });
-
                     if (!response.ok) {
                         const errData = await response.json().catch(() => ({}));
                         throw new Error(errData.error || `HTTP error ${response.status}`);
@@ -943,17 +1045,13 @@
                     return;
                 }
             }
-
             progressBar.style.width = '100%';
             progressLabel.textContent = `Successfully uploaded ${files.length} items to ${albumName}!`;
-
             albumInput.value = '';
             fileInput.value = '';
             document.getElementById('file-summary').textContent = '';
             btnUpload.disabled = false;
-
             await initVault();
-
             setTimeout(() => {
                 switchSection(category.toLowerCase());
                 if (category === "Videos") {
@@ -963,7 +1061,6 @@
                 }
             }, 1000);
         }
-
         function createFolderTile(album, onClickHandler) {
             const card = document.createElement('div');
             card.className = 'media-card';
@@ -972,7 +1069,6 @@
             const coverMedia = isVideoCover 
                 ? `<video src="${album.cover}#t=0.5" preload="metadata" muted playsinline></video>`
                 : `<img src="${album.cover}" alt="${album.albumName}" loading="lazy">`;
-
             card.innerHTML = `
                 <div class="media-poster">
                     <span class="media-badge">ALBUM</span>
@@ -986,12 +1082,10 @@
             card.onclick = onClickHandler;
             return card;
         }
-
         function createPhotoTile(item, onClickHandler) {
             const card = document.createElement('div');
             card.className = 'media-card';
             const isVid = isVideoPath(item.Path);
-
             if (isVid) {
                 card.innerHTML = `
                     <div class="media-poster">
@@ -1013,7 +1107,6 @@
             card.onclick = onClickHandler;
             return card;
         }
-
         function createFeaturedVideoTile(video) {
             const card = document.createElement('div');
             card.className = 'media-card';
@@ -1033,15 +1126,12 @@
             card.onclick = () => playSelectedVideo(video.Path, video.Title, false);
             return card;
         }
-
         function playSelectedVideo(url, title, isNativeR2 = false) {
             const iframe = document.getElementById('mainIframePlayer');
             const nativeVideo = document.getElementById('mainNativePlayer');
             const titleEl = document.getElementById('currentVideoTitle');
             const badgeEl = document.getElementById('currentVideoBadge');
-
             titleEl.textContent = title;
-
             if (isNativeR2 || isVideoPath(url)) {
                 iframe.style.display = 'none';
                 iframe.src = '';
@@ -1058,89 +1148,72 @@
                 iframe.style.display = 'block';
                 badgeEl.textContent = "YouTube 1080p Stream";
             }
-
             switchSection('videos');
         }
-
         function renderVideoVault() {
             const container = document.getElementById('video-albums-row');
             const titleEl = document.getElementById('videos-albums-title');
             const backBtn = document.getElementById('videos-back-btn');
             const featuredRow = document.getElementById('video-catalog-row');
-
             if (!container) return;
             backBtn.style.display = 'none';
             container.innerHTML = '';
             titleEl.textContent = '📁 Family Video Albums';
-
             if (featuredRow) {
                 featuredRow.innerHTML = '';
                 featuredVideos.forEach(v => featuredRow.appendChild(createFeaturedVideoTile(v)));
             }
-
             const videoAlbums = vaultAlbums.Videos || [];
             if (videoAlbums.length === 0) {
                 container.innerHTML = `<p style="font-size: 13px; color: var(--text-secondary); padding: 10px 0;">No dedicated video albums yet. Use "Upload Album" to add one!</p>`;
                 return;
             }
-
             videoAlbums.forEach((album, idx) => {
                 const folderCard = createFolderTile(album, () => openVideoAlbum(idx));
                 container.appendChild(folderCard);
             });
         }
-
         function openVideoAlbum(albumIndex) {
             const album = vaultAlbums.Videos[albumIndex];
             const container = document.getElementById('video-albums-row');
             const titleEl = document.getElementById('videos-albums-title');
             const backBtn = document.getElementById('videos-back-btn');
-
             titleEl.textContent = `📁 ${album.albumName} (${album.items.length} Videos)`;
             backBtn.style.display = 'inline';
             container.innerHTML = '';
-
             album.items.forEach((item, idx) => {
                 const tile = createPhotoTile(item, () => playSelectedVideo(item.Path, item.Title, true));
                 container.appendChild(tile);
             });
         }
-
         function openAlbum(categoryKey, albumIndex) {
             const album = vaultAlbums[categoryKey][albumIndex];
             const lowerKey = categoryKey.toLowerCase();
             
             switchSection(lowerKey);
-
             const container = document.getElementById(lowerKey + '-full-row');
             const titleEl = document.getElementById(lowerKey + '-section-title');
             const backBtn = document.getElementById(lowerKey + '-back-btn');
-
             titleEl.textContent = `📁 ${album.albumName} (${album.items.length} Items)`;
             backBtn.style.display = 'inline';
             container.innerHTML = '';
-
             album.items.forEach((photo, idx) => {
                 const tile = createPhotoTile(photo, () => openAlbumGallery(album.items, idx));
                 container.appendChild(tile);
             });
         }
-
         function renderCategoryAlbums(categoryKey) {
             if (categoryKey === "Videos") {
                 renderVideoVault();
                 return;
             }
-
             const lowerKey = categoryKey.toLowerCase();
             const container = document.getElementById(lowerKey + '-full-row');
             const titleEl = document.getElementById(lowerKey + '-section-title');
             const backBtn = document.getElementById(lowerKey + '-back-btn');
-
             if (!container) return;
             backBtn.style.display = 'none';
             container.innerHTML = '';
-
             const albums = vaultAlbums[categoryKey] || [];
             
             const titles = {
@@ -1152,18 +1225,15 @@
                 Hobbies: "🎨 Our Hobbies & Entertainment"
             };
             titleEl.textContent = titles[categoryKey] || categoryKey;
-
             if (albums.length === 0) {
                 container.innerHTML = `<p style="font-size: 13px; color: var(--text-secondary); padding: 10px 0;">No albums uploaded in this category yet. Use "Upload Album" to add one!</p>`;
                 return;
             }
-
             albums.forEach((album, idx) => {
                 const folderCard = createFolderTile(album, () => openAlbum(categoryKey, idx));
                 container.appendChild(folderCard);
             });
         }
-
         function openAlbumGallery(images, startIndex = 0) {
             if (!images || !images.length) return;
             activeGalleryList = images;
@@ -1171,7 +1241,6 @@
             showCurrentImage();
             document.getElementById('lightbox').classList.add('active');
         }
-
         function showCurrentImage() {
             if (!activeGalleryList.length) return;
             const item = activeGalleryList[activeGalleryIndex];
@@ -1180,7 +1249,6 @@
             const capEl = document.getElementById('lightboxCaption');
             
             const isVid = isVideoPath(item.Path);
-
             if (isVid) {
                 imgEl.style.display = 'none';
                 imgEl.src = '';
@@ -1195,24 +1263,20 @@
                 imgEl.src = item.Path;
                 imgEl.style.display = 'block';
             }
-
             capEl.textContent = `${item.Title} (${activeGalleryIndex + 1} of ${activeGalleryList.length})`;
         }
-
         function nextLightboxImage(e) {
             if (e) e.stopPropagation();
             if (!activeGalleryList.length) return;
             activeGalleryIndex = (activeGalleryIndex + 1) % activeGalleryList.length;
             showCurrentImage();
         }
-
         function prevLightboxImage(e) {
             if (e) e.stopPropagation();
             if (!activeGalleryList.length) return;
             activeGalleryIndex = (activeGalleryIndex - 1 + activeGalleryList.length) % activeGalleryList.length;
             showCurrentImage();
         }
-
         function closeLightbox() {
             const vidEl = document.getElementById('lightboxVideo');
             if (vidEl) {
@@ -1221,7 +1285,6 @@
             }
             document.getElementById('lightbox').classList.remove('active');
         }
-
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('lightbox').classList.contains('active')) {
                 if (e.key === 'ArrowRight') nextLightboxImage();
@@ -1229,7 +1292,6 @@
                 if (e.key === 'Escape') closeLightbox();
             }
         });
-
         async function initVault() {
             try {
                 const res = await fetch(`${WORKER_UPLOAD_URL}/api/albums`);
@@ -1252,12 +1314,10 @@
             } catch (err) {
                 console.warn("Could not load dynamic albums from R2, relying on base catalog:", err);
             }
-
             // Populate Video Albums row on Browse All if video albums exist
             const dashVideoAlbumsRow = document.getElementById('row-video-albums');
             const dashVideoAlbumsHeader = document.getElementById('header-dash-video-albums');
             const videoAlbums = vaultAlbums.Videos || [];
-
             if (dashVideoAlbumsRow && dashVideoAlbumsHeader) {
                 if (videoAlbums.length > 0) {
                     dashVideoAlbumsRow.innerHTML = '';
@@ -1274,14 +1334,12 @@
                     dashVideoAlbumsRow.style.display = 'none';
                 }
             }
-
             // Render Featured Videos row on Browse All
             const rowVideos = document.getElementById('row-videos');
             if (rowVideos) {
                 rowVideos.innerHTML = '';
                 featuredVideos.forEach(v => rowVideos.appendChild(createFeaturedVideoTile(v)));
             }
-
             // Populate dashboard photo rows
             const populateDashboardRow = (categoryKey, dashRowId) => {
                 const row = document.getElementById(dashRowId);
@@ -1292,14 +1350,12 @@
                     row.appendChild(createFolderTile(album, () => openAlbum(categoryKey, idx)));
                 });
             };
-
             populateDashboardRow('Weddings', 'row-weddings');
             populateDashboardRow('Honduras', 'row-honduras');
             populateDashboardRow('Miami', 'row-miami');
             populateDashboardRow('Siblings', 'row-siblings');
             populateDashboardRow('Parents', 'row-parents');
             populateDashboardRow('Hobbies', 'row-hobbies');
-
             // Render category views
             renderCategoryAlbums('Weddings');
             renderCategoryAlbums('Honduras');
@@ -1309,7 +1365,6 @@
             renderCategoryAlbums('Hobbies');
             renderVideoVault();
         }
-
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initVault);
         } else {
